@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <h1>Welcome from GitHub Pages</h1>
+    <h1>Welcome from Ryun</h1>
   </div>
 </template>
 
