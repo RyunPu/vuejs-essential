@@ -1,0 +1,10 @@
+{
+  "name": "vuejs-essential",
+  "version": "1.0.0",
+  "description": "A Vue.js project",
+  "author": "Yuanmin Pu <ryunpu@163.com>",
+  "private": true,
+  "scripts": {
+    "postinstall": "npm install express"
+  }
+}
