@@ -9,7 +9,7 @@
     </div>
     <div class="jumbotron">
       <div class="container">
-        <h1>Welcome from Awesome</h1>
+        <h1>Welcome from Font Awesome</h1>
         <p>Get vector icons and social logos on your website with Font Awesome, the web’s most popular icon set and toolkit.</p>
         <p>
           <i class="fa fa-camera fa-1x"></i>
