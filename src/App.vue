@@ -1,16 +1,19 @@
 <template>
   <div class="wrap">
     <TopicsHeader/>
+    <TopicsFooter/>
   </div>
 </template>
 
 <script>
 import TopicsHeader from '@/components/layouts/TopicsHeader'
+import TopicsFooter from '@/components/layouts/TopicsFooter'
 
 export default {
   name: 'App',
   components: {
-    TopicsHeader
+    TopicsHeader,
+    TopicsFooter
   }
 }
 </script>
