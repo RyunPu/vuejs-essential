@@ -31,5 +31,5 @@ $fa-font-path: "~font-awesome/fonts/";
 
 @import "~bootstrap-sass/assets/stylesheets/_bootstrap";
 @import "~font-awesome/scss/font-awesome";
-@import "styles/main.css";
+@import "styles/main";
 </style>
