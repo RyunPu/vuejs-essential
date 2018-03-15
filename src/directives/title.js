@@ -1,21 +1,22 @@
 function showTitle(element, title) {
   const popover = getPopover()
+  const popoverStyle = popover.style
 
   if (!title) {
-    popover.style.display = 'none'
+    popoverStyle.display = 'none'
   } else {
-    const rect = element.getBoundingClientRect()
-    const elementStyle = window.getComputedStyle(element, null)
-    const rightOffset = parseInt(elementStyle.getPropertyValue('padding-right')) || 0
-    const topOffset = parseInt(elementStyle.getPropertyValue('padding-top')) || 0
+    const elementRect = element.getBoundingClientRect()
+    const elementComputedStyle = window.getComputedStyle(element, null)
+    const rightOffset = parseInt(elementComputedStyle.getPropertyValue('padding-right')) || 0
+    const topOffset = parseInt(elementComputedStyle.getPropertyValue('padding-top')) || 0
 
-    popover.style.visibility = 'hidden'
-    popover.style.display = 'block'
+    popoverStyle.visibility = 'hidden'
+    popoverStyle.display = 'block'
     popover.querySelector('.popover-content').textContent = title
-    popover.style.left = rect.left - popover.offsetWidth / 2 + (element.offsetWidth - rightOffset) / 2 + 'px'
-    popover.style.top = rect.top - popover.offsetHeight + topOffset + 'px'
-    popover.style.display = 'block'
-    popover.style.visibility = 'visible'
+    popoverStyle.left = elementRect.left - popover.offsetWidth / 2 + (element.offsetWidth - rightOffset) / 2 + 'px'
+    popoverStyle.top = elementRect.top - popover.offsetHeight + topOffset + 'px'
+    popoverStyle.display = 'block'
+    popoverStyle.visibility = 'visible'
   }
 }
 
