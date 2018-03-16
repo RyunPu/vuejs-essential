@@ -66,7 +66,7 @@ export default {
   },
   data() {
     return {
-      description: '我们是高品质的 Laravel 开发者社区，致力于为 Laravel 开发者提供一个分享创造、结识伙伴、协同互助的平台。',
+      description: 'VuejsCaff 是一个 Vue.js 的知识社区',
       contacts: [
         {
           icon: 'envelope',
@@ -81,7 +81,7 @@ export default {
         {
           icon: 'weixin',
           title: '加我微信',
-          link: 'https://laravel-china.org/contact'
+          link: 'https://vuejscaff.com/contact'
         }
       ],
       contactStyle: {
@@ -89,7 +89,7 @@ export default {
       },
       designer: `
         <span style="font-size:0.9em">Designed by
-          <span style="color: #e27575;font-size: 14px;">❤</span>
+          <span style="color: #4fc08d;font-size: 14px;">❤</span>
           <a href="https://github.com/summerblue"target="_blank"style="color:inherit">Summer</a>
         </span>
       `,
@@ -141,12 +141,12 @@ export default {
           {
             icon: 'thumbs-up',
             title: '软件外包服务',
-            link: 'http://yousails.mikecrm.com/4Dh5uWU'
+            link: 'https://vuejscaff.com/contact'
           },
           {
             icon: 'globe',
             title: '推荐网站',
-            link: 'https://laravel-china.org/sites'
+            link: 'https://vuejscaff.com/sites'
           }
         ]
       }
@@ -156,5 +156,5 @@ export default {
 </script>
 
 <style scoped>
-a:hover, a:focus { color: #d6514d; transition: color .15s;}
+a:hover, a:focus { color: #4fc08d; transition: color .15s;}
 </style>

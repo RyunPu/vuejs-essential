@@ -32,16 +32,16 @@ export default {
   data() {
     return {
       logo: {
-        src: `${this.uploadsUrl}sites/hG5JuDSqZ7Y26Kuh0Qat8EYv6XNT0fGc.png`,
-        title: 'Laravel China'
+        src: `${this.uploadsUrl}sites/T8mk968ceFj4uiFhvv9zh7ACdQFNwo4U.png`,
+        title: 'VuejsCaff'
       },
       activeNavIndex: 0,
       showCollapsedNav: false,
-      navList: ['社区', '招聘', '头条', '问答', '教程', '文档', '翻译']
+      navList: ['社区', '头条', '问答', '教程']
     }
   },
   beforeCreate() {
-    this.uploadsUrl = 'https://lccdn.phphub.org/uploads/'
+    this.uploadsUrl = 'https://vuejscaffcdn.phphub.org/uploads/'
   },
   methods: {
     changeNavIndex(index) {
@@ -54,7 +54,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 .title { display: none;}
 .navbar-default .navbar-nav > .active > a { background: rgba(0,0,0,.03);}
