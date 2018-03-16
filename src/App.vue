@@ -1,6 +1,7 @@
 <template>
-  <div class="wrap">
+  <div id="wrap">
     <TopicsHeader/>
+    <router-view/>
     <TopicsFooter/>
   </div>
 </template>

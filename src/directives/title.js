@@ -25,7 +25,7 @@ function getPopover() {
 
   if (!popover) {
     const tpl = `
-      <div class="popover title-popover top fade in">
+      <div class="popover title-popover top fade in" style="position:fixed;">
         <div class="arrow"></div>
         <div class="popover-content"></div>
       </div>
