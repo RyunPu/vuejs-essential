@@ -9,3 +9,7 @@
 .topic-content-big-font p {line-height:2.2;}
 ul.breadcrumb a {color:inherit;}
 .navbar-default .navbar-brand img {width:auto;height:28px;margin-top:-4px;}
+.flex {display:flex;}
+.flex1 {flex:1;}
+.vcenter {align-items:center;@extend .flex;}
+.hcenter {justify-content: center;@extend .flex;}

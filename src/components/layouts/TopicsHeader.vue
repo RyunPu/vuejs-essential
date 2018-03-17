@@ -9,10 +9,10 @@
           <span class="icon-bar"></span>
         </button>
 
-        <router-link to="/" class="navbar-brand">
+        <a href="/" class="navbar-brand">
           <span class="title">{{ logo.title }}</span>
           <img :src="logo.src" :alt="logo.title">
-        </router-link>
+        </a>
       </div>
 
       <div id="top-navbar-collapse" :class="['collapse', 'navbar-collapse', { in: showCollapsedNav }]">
