@@ -89,7 +89,7 @@ export default {
       },
       designer: `
         <span style="font-size:0.9em">Designed by
-          <span style="color: #4fc08d;font-size: 14px;">❤</span>
+          <span style="color: #e27575;font-size: 14px;">❤</span>
           <a href="https://github.com/summerblue"target="_blank"style="color:inherit">Summer</a>
         </span>
       `,
@@ -156,5 +156,5 @@ export default {
 </script>
 
 <style scoped>
-a:hover, a:focus { color: #4fc08d; transition: color .15s;}
+
 </style>

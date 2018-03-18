@@ -7,7 +7,8 @@ function validate(el, modifiers, bindingValue = {}) {
   if (modifiers.required && value === '') {
     defaultHint = `${title}不能为空`
   } else if (bindingValue.target) {
-    const targetValue = document.querySelector(bindingValue.target).value.trim()
+    const target = document.querySelector(bindingValue.target)
+    const targetValue = target ? target.value : null
 
     if (targetValue !== value) {
       defaultHint = `输入的${title}不匹配`

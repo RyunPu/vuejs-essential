@@ -2,6 +2,8 @@
   <div class="container main-container">
     <div class="row">
       <div class="col-md-4 col-md-offset-4 floating-box">
+        <Message :type="msgType" :msg="msg" :show.sync="msgShow"/>
+
         <div class="panel panel-default">
           <div class="panel-heading">
             <h3 class="panel-title">请注册</h3>
@@ -27,7 +29,7 @@
             <div @click="createCaptcha" class="thumbnail" title="点击图片重新获取验证码">
               <div class="captcha vcenter" v-html="captchaTpl"></div>
             </div>
-            <button type="submit" class="btn btn-lg btn-success btn-block">
+            <button @click="register" type="submit" class="btn btn-lg btn-success btn-block">
               <i class="fa fa-btn fa-sign-in"></i> 注册
             </button>
           </div>
@@ -47,7 +49,11 @@ export default {
       cpassword: '',
       captcha: '',
       captchaTpl: '',
-      words: 'QWERTYUIOPLKJHGFDSAZXCVBNM1234567890'
+      letters: 'QWERTYUIOPLKJHGFDSAZXCVBNM1234567890',
+      canSubmit: false,
+      msgShow: false,
+      msgType: '',
+      msg: ''
     }
   },
   created() {
@@ -55,10 +61,9 @@ export default {
   },
   methods: {
     createCaptcha() {
-      const words = this.words
-      const captcha = [...Array(6)].map(() => words[Math.floor(Math.random() * words.length)])
+      const letters = this.letters
+      const captcha = [...Array(6)].map(() => letters[Math.floor(Math.random() * letters.length)])
       let tpl = ''
-
 
       captcha.map((item, index) => {
         tpl += `<span class="flex1 hcenter">${item}</span>`
@@ -66,6 +71,51 @@ export default {
 
       this.captchaTpl = tpl
       this.localCaptcha = captcha.join('')
+    },
+    register() {
+      this.$nextTick(() => {
+        if (this.canSubmit) {
+          this.submit()
+        }
+      })
+    },
+    submit() {
+      if (this.captcha.toUpperCase() !== this.localCaptcha) {
+        this.showMsg('验证码不正确', 'warning')
+      } else {
+        const user = {
+          name: this.username,
+          password: this.password
+        }
+        let localUser = localStorage.getItem('user')
+
+        try {
+          localUser = JSON.parse(localUser)
+        } catch (e) {}
+
+        if (localUser !== null) {
+          if (localUser.name === user.name) {
+            this.showMsg('用户名已存在', 'warning')
+          } else {
+            this.login(user)
+          }
+        } else {
+          this.login(user)
+        }
+      }
+    },
+    showMsg(msg, type = 'success') {
+      this.msgShow = false
+      this.msgType = type
+      this.msg = msg
+
+      this.$nextTick(() => {
+        this.msgShow = true
+      })
+    },
+    login(user) {
+      localStorage.setItem('user', JSON.stringify(user))
+      this.showMsg('注册成功')
     }
   }
 }
