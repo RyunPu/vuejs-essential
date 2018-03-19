@@ -40,6 +40,8 @@
 </template>
 
 <script>
+import getCaptcha from '../../utils/getCaptcha'
+
 export default {
   name: 'Register',
   data() {
@@ -49,7 +51,6 @@ export default {
       cpassword: '',
       captcha: '',
       captchaTpl: '',
-      letters: 'QWERTYUIOPLKJHGFDSAZXCVBNM1234567890',
       canSubmit: false,
       msgShow: false,
       msgType: '',
@@ -61,16 +62,10 @@ export default {
   },
   methods: {
     createCaptcha() {
-      const letters = this.letters
-      const captcha = [...Array(6)].map(() => letters[Math.floor(Math.random() * letters.length)])
-      let tpl = ''
-
-      captcha.map((item, index) => {
-        tpl += `<span class="flex1 hcenter">${item}</span>`
-      })
+      const { tpl, captcha } = getCaptcha(6)
 
       this.captchaTpl = tpl
-      this.localCaptcha = captcha.join('')
+      this.localCaptcha = captcha
     },
     register() {
       this.$nextTick(() => {
@@ -87,13 +82,9 @@ export default {
           name: this.username,
           password: this.password
         }
-        let localUser = localStorage.getItem('user')
+        const localUser = this.$store.state.user
 
-        try {
-          localUser = JSON.parse(localUser)
-        } catch (e) {}
-
-        if (localUser !== null) {
+        if (localUser) {
           if (localUser.name === user.name) {
             this.showMsg('用户名已存在', 'warning')
           } else {
@@ -114,8 +105,7 @@ export default {
       })
     },
     login(user) {
-      localStorage.setItem('user', JSON.stringify(user))
-      this.showMsg('注册成功')
+      this.$store.dispatch('login', user)
     }
   }
 }
