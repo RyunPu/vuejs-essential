@@ -29,7 +29,7 @@ const actions = {
   },
   logout({ commit }) {
     commit('UPDATE_AUTH', false)
-    router.push('/')
+    router.push({ name: 'Home', params: { logout: true } })
   }
 }
 
