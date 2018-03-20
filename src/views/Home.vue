@@ -5,6 +5,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: 'Home',
   data() {
@@ -14,6 +16,9 @@ export default {
       msg: ''
     }
   },
+  computed: mapState([
+    'auth'
+  ]),
   beforeRouteEnter(to, from, next) {
     const name = from.name
 
@@ -21,7 +26,7 @@ export default {
       if (vm.$store.state.auth) {
         switch (name) {
           case 'Register':
-            vm.showMsg('注册成功')
+            vm.showMsg('注册成功！')
             break
         }
       }
@@ -32,6 +37,11 @@ export default {
       this.msgType = type
       this.msg = msg
       this.msgShow = true
+    }
+  },
+  watch: {
+    auth() {
+      this.showMsg('操作成功！')
     }
   }
 }

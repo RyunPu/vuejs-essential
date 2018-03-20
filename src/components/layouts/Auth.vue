@@ -9,7 +9,7 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-          <li><a href="#"><i class="fa fa-sign-out text-md"></i>退出</a></li>
+          <li><a href="javascript:;" @click="confirmLogout"><i class="fa fa-sign-out text-md"></i>退出</a></li>
         </ul>
       </li>
     </ul>
@@ -26,13 +26,22 @@
 
 <script>
 import { mapState } from 'vuex'
+import { mapActions } from 'vuex'
 
 export default {
   name: 'Auth',
   computed: mapState([
     'auth',
     'user'
-  ])
+  ]),
+  methods: {
+    confirmLogout() {
+      this.logout()
+    },
+    ...mapActions([
+      'logout'
+    ])
+  }
 }
 </script>
 

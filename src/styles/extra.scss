@@ -13,3 +13,4 @@ ul.breadcrumb a {color:inherit;}
 .flex1 {flex:1;}
 .vcenter {align-items:center;@extend .flex;}
 .hcenter {justify-content: center;@extend .flex;}
+html.swal2-shown,body.swal2-shown {height:100% !important;}
