@@ -26,6 +26,10 @@ const actions = {
     commit('UPDATE_AUTH', true)
     if (user) commit('UPDATE_USER', user)
     router.push('/')
+  },
+  logout({ commit }) {
+    commit('UPDATE_AUTH', false)
+    router.push('/')
   }
 }
 

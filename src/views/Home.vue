@@ -18,10 +18,12 @@ export default {
     const name = from.name
 
     next(vm => {
-      switch (name) {
-        case 'Register':
-          vm.showMsg('注册成功')
-          break
+      if (vm.$store.state.auth) {
+        switch (name) {
+          case 'Register':
+            vm.showMsg('注册成功')
+            break
+        }
       }
     })
   },

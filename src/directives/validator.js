@@ -1,5 +1,5 @@
 function validate(el, modifiers, bindingValue = {}) {
-  const value = el.value.trim()
+  const value = el.value ? el.value.trim() : ''
   const title = bindingValue.title || '该项'
   const hint = bindingValue.hint
   let defaultHint = ''

@@ -2,7 +2,7 @@
   <div class="navbar-right">
     <ul v-if="auth" class="nav navbar-nav github-login">
       <li>
-        <a href="javascript:;">
+        <a v-dropdown href="javascript:;">
           <i class="fa fa-user-circle avatar-topnav"></i>
           <span v-if="user && user.name">{{ user.name }}</span>
           <span v-else>佚名</span>
