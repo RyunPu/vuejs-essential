@@ -14,3 +14,5 @@ ul.breadcrumb a {color:inherit;}
 .vcenter {align-items:center;@extend .flex;}
 .hcenter {justify-content: center;@extend .flex;}
 html.swal2-shown,body.swal2-shown {height:100% !important;}
+.add-link-underline a,a.add-link-underline {text-decoration:underline;}
+div#reply_notice{margin-bottom:15px;border:1px solid #ddd;}

@@ -15,6 +15,12 @@ export default [
     component: () => import('@/views/auth/Login')
   },
   {
+    path: '/articles/create',
+    name: 'Create',
+    component: () => import('@/views/articles/Create'),
+    meta: { auth: true }
+  },
+  {
     path: '*',
     redirect: '/'
   }
