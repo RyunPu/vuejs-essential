@@ -35,6 +35,8 @@ $fa-font-path: "~font-awesome/fonts/";
 
 @import "~bootstrap-sass/assets/stylesheets/_bootstrap";
 @import "~font-awesome/scss/font-awesome";
+@import 'simplemde/dist/simplemde.min.css';
+@import 'highlight.js/styles/paraiso-dark.css';
 @import "./styles/main";
 @import "./styles/extra";
 </style>

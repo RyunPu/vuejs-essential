@@ -10,9 +10,14 @@ const router =  new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  const auth = router.app.$options.store.state.auth
+  const store = router.app.$options.store
+  const auth = store.state.auth
+  const articleId = to.params.articleId
 
-  if ((auth && to.path.indexOf('/auth/') !== -1) || (!auth && to.meta.auth)) {
+  if ((auth && to.path.indexOf('/auth/') !== -1) ||
+    (!auth && to.meta.auth) ||
+    (articleId && !store.getters.getArticleById(articleId))
+  ) {
     next('/')
   } else {
     next()

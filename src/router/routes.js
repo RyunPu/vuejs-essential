@@ -21,6 +21,18 @@ export default [
     meta: { auth: true }
   },
   {
+    path: '/column',
+    name: 'Column',
+    component: () => import('@/views/articles/Column'),
+    children: [
+      {
+        path: '/articles/:articleId/content',
+        name: 'Content',
+        component: () => import('@/components/layouts/Content.vue')
+      }
+    ]
+  },
+  {
     path: '*',
     redirect: '/'
   }

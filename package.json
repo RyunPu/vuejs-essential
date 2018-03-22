@@ -13,6 +13,9 @@
   "dependencies": {
     "bootstrap-sass": "^3.3.7",
     "font-awesome": "^4.7.0",
+    "highlight.js": "^9.12.0",
+    "node-emoji": "^1.8.1",
+    "simplemde": "^1.11.2",
     "sweetalert2": "^7.16.0",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
