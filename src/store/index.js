@@ -57,6 +57,7 @@ const actions = {
     let articleId
     const uid = 1
     const { title, content } = article
+    const date = new Date()
 
     if (create) {
       articleId = articles.length + 1
@@ -65,12 +66,13 @@ const actions = {
         articleId,
         uid,
         title,
-        content
+        content,
+        date
       })
     }
 
     commit('UPDATE_ARTICLES', articles)
-    router.push({ name: 'Content', params: { articleId } })
+    router.push({ name: 'Content', params: { articleId, showMsg: true } })
   }
 }
 

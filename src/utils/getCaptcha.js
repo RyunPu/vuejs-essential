@@ -1,4 +1,4 @@
-export default (num = 6, letters = 'QWERTYUIOPLKJHGFDSAZXCVBNM1234567890') => {
+export default function(num = 6, letters = 'QWERTYUIOPLKJHGFDSAZXCVBNM1234567890') {
   let tpl = ''
   let captcha = []
 
