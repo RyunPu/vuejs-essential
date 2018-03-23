@@ -21,6 +21,12 @@ export default [
     meta: { auth: true }
   },
   {
+    path: '/articles/:articleId/edit',
+    name: 'Edit',
+    component: () => import('@/views/articles/Create'),
+    meta: { auth: true }
+  },
+  {
     path: '/column',
     name: 'Column',
     component: () => import('@/views/articles/Column'),

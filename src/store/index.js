@@ -16,7 +16,7 @@ const getters = {
     let articles = state.articles
 
     if (Array.isArray(articles)) {
-      articles = articles.filter(article => parseInt(id) === article.articleId)
+      articles = articles.filter(article => parseInt(id) === parseInt(article.articleId))
       return articles.length ? articles : null
     } else {
       return null
@@ -49,30 +49,62 @@ const actions = {
     commit('UPDATE_AUTH', false)
     router.push({ name: 'Home', params: { logout: true } })
   },
-  post({ commit, state }, { article, create }) {
+  post({ commit, state }, { article, articleId }) {
     let articles = state.articles
 
     if (!Array.isArray(articles)) articles = []
 
-    let articleId
-    const uid = 1
-    const { title, content } = article
-    const date = new Date()
+    if (article) {
+      const uid = 1
+      const { title, content } = article
+      let date = new Date()
 
-    if (create) {
-      articleId = articles.length + 1
+      if (!articleId) {
+        const lastArticle = articles[articles.length - 1]
 
-      articles.push({
-        articleId,
-        uid,
-        title,
-        content,
-        date
-      })
+        if (lastArticle && lastArticle.articleId) {
+          articleId = parseInt(lastArticle.articleId) + 1
+        } else {
+          articleId = articles.length + 1
+        }
+
+        articles.push({
+          articleId,
+          uid,
+          title,
+          content,
+          date
+        })
+      } else {
+        for (const [index, article] of articles.entries()) {
+          if (parseInt(article.articleId) === parseInt(articleId)) {
+            date = article.date
+            articles[index] = {
+              articleId,
+              uid,
+              title,
+              content,
+              date
+            }
+
+            break
+          }
+        }
+      }
+
+      router.push({ name: 'Content', params: { articleId, showMsg: true } })
+    } else {
+      for (const [index, article] of articles.entries()) {
+        if (parseInt(article.articleId) === parseInt(articleId)) {
+          articles.splice(index, 1)
+          break
+        }
+      }
+
+      router.push({ name: 'Home', params: { showMsg: true } })
     }
 
     commit('UPDATE_ARTICLES', articles)
-    router.push({ name: 'Content', params: { articleId, showMsg: true } })
   }
 }
 

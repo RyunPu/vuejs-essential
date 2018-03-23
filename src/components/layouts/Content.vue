@@ -9,6 +9,13 @@
       <div class="entry-content">
         <div class="content-body entry-content panel-body ">
           <div class="markdown-body" v-html="content"></div>
+
+          <div class="panel-footer operate">
+            <div class="actions">
+              <a @click="deleteArticle" class="admin" href="javascript:;"><i class="fa fa-trash-o"></i></a>
+              <a @click="editArticle" class="admin" href="javascript:;"><i class="fa fa-pencil-square-o"></i></a>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -45,6 +52,27 @@ export default {
         this.$el.querySelectorAll('pre code').forEach((el) => {
           hljs.highlightBlock(el)
         })
+      })
+    }
+
+    this.articleId = articleId
+  },
+  methods: {
+    editArticle() {
+      this.$router.push({ name: 'Edit', params: { articleId: this.articleId } })
+    },
+    deleteArticle() {
+      this.$swal({
+        text: '你确定要删除此内容吗?',
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: 'rgb(140,212,245)',
+        cancelButtonColor: 'rgb(193,193,193)',
+        confirmButtonText: '删除',
+      }).then((res) => {
+        if (res.value) {
+          this.$store.dispatch('post', { articleId: this.articleId })
+        }
       })
     }
   }

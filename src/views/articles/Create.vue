@@ -3,7 +3,7 @@
     <div class="blog-pages">
       <div class="col-md-12 panel">
         <div class="panel-body">
-          <h2 class="text-center">创作文章</h2>
+          <h2 class="text-center">{{ articleId ? '编辑文章' : '创作文章' }}</h2>
           <hr>
           <div data-form>
             <div class="form-group">
@@ -35,8 +35,27 @@ export default {
     return {
       title: '',
       content: '',
-      canSubmit: false
+      canSubmit: false,
+      articleId: ''
     }
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      const articleId = vm.$route.params.articleId
+      const localArticleId = ls.getItem('articleId')
+
+      if (!(articleId && articleId === localArticleId)) {
+        vm.clearData()
+      }
+
+      vm.articleId = articleId
+      vm.fillContent(articleId)
+      ls.setItem('articleId', articleId)
+    })
+  },
+  beforeRouteLeave(to, from, next) {
+    this.clearData()
+    next()
   },
   mounted() {
     const simplemde = new SimpleMDE({
@@ -53,13 +72,6 @@ export default {
       }
     })
 
-    if (ls.getItem('smde_title')) {
-      this.title = ls.getItem('smde_title')
-      this.content = simplemde.value()
-    } else {
-      this.content = simplemde.value('')
-    }
-
     simplemde.codemirror.on('change', () => {
       this.content = simplemde.value()
     })
@@ -67,6 +79,30 @@ export default {
     this.simplemde = simplemde
   },
   methods: {
+    fillContent(articleId) {
+      const simplemde = this.simplemde
+
+      if (articleId) {
+        const post = this.$store.getters.getArticleById(articleId)
+
+        if (post) {
+          const { title, content } = post[0]
+
+          this.title = ls.getItem('smde_title') || title
+          this.content = simplemde.value() || content
+          this.saveTitle()
+          simplemde.value(this.content)
+          this.articleId = articleId
+        }
+      } else {
+        if (ls.getItem('smde_title')) {
+          this.title = ls.getItem('smde_title')
+          this.content = simplemde.value()
+        } else {
+          this.content = simplemde.value('')
+        }
+      }
+    },
     saveTitle() {
       ls.setItem('smde_title', this.title)
     },
@@ -87,12 +123,15 @@ export default {
           content
         }
 
-        this.$store.dispatch('post', { article, create: true })
-        this.title = ''
-        ls.removeItem('smde_title')
-        this.simplemde.value('')
-        this.simplemde.clearAutosavedValue()
+        this.$store.dispatch('post', { article, articleId: this.articleId })
+        this.clearData()
       }
+    },
+    clearData() {
+      this.title = ''
+      ls.removeItem('smde_title')
+      this.simplemde.value('')
+      this.simplemde.clearAutosavedValue()
     }
   }
 }
