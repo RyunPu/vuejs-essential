@@ -37,7 +37,7 @@ export default {
       return this.user && this.user.name
     },
     columnPic() {
-      return this.user && this.user.columnPic || 'http://lorempixel.com/200/200/nature/1'
+      return this.user && (this.user.columnPic || this.user.avatar)
     },
     articleNum() {
       return this.articles ? this.articles.length : 0

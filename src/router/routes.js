@@ -28,7 +28,6 @@ export default [
   },
   {
     path: '/:user',
-    name: 'Column',
     component: () => import('@/views/articles/Column'),
     children: [
       {
@@ -37,8 +36,8 @@ export default [
         component: () => import('@/views/articles/Content.vue')
       },
       {
-        path: '/:user',
-        name: 'List',
+        path: '',
+        name: 'Column',
         component: () => import('@/views/articles/List.vue')
       }
     ]
