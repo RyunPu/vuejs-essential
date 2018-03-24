@@ -11,14 +11,17 @@
       </li>
       <li>
         <a v-dropdown href="javascript:;">
-          <i class="fa fa-user-circle avatar-topnav"></i>
-          <span v-if="user && user.name">{{ user.name }}</span>
-          <span v-else>佚名</span>
+          <img v-if="avatar" :src="avatar" class="avatar-topnav">
+          <i v-else class="fa fa-user-circle avatar-topnav"></i>
+          <span v-if="userName">{{ userName }}</span>
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-          <li v-if="user && user.name">
-            <router-link :to="`/${user.name}`"><i class="fa fa-list-ul text-md i-middle"></i>个人专栏</router-link>
+          <li>
+            <router-link :to="`/${userName}`">
+              <i class="fa fa-list-ul text-md i-middle"></i>
+              个人专栏
+            </router-link>
           </li>
           <li><a href="javascript:;" @click="confirmLogout"><i class="fa fa-sign-out text-md"></i>退出</a></li>
         </ul>
@@ -41,10 +44,18 @@ import { mapActions } from 'vuex'
 
 export default {
   name: 'Auth',
-  computed: mapState([
-    'auth',
-    'user'
-  ]),
+  computed: {
+    userName() {
+      return this.user && this.user.name
+    },
+    avatar() {
+      return this.user && this.user.avatar
+    },
+    ...mapState([
+      'user',
+      'auth'
+    ])
+  },
   methods: {
     confirmLogout() {
       this.$swal({

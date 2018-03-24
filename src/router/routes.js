@@ -35,6 +35,11 @@ export default [
         path: '/articles/:articleId/content',
         name: 'Content',
         component: () => import('@/views/articles/Content.vue')
+      },
+      {
+        path: '/:user',
+        name: 'List',
+        component: () => import('@/views/articles/List.vue')
       }
     ]
   },
