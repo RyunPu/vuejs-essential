@@ -27,14 +27,14 @@ export default [
     meta: { auth: true }
   },
   {
-    path: '/column',
+    path: '/:user',
     name: 'Column',
     component: () => import('@/views/articles/Column'),
     children: [
       {
         path: '/articles/:articleId/content',
         name: 'Content',
-        component: () => import('@/components/layouts/Content.vue')
+        component: () => import('@/views/articles/Content.vue')
       }
     ]
   },

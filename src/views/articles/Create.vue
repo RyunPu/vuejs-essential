@@ -116,7 +116,7 @@ export default {
     submit() {
       const content = this.content
 
-      if (content && content.trim() !== '') {
+      if (typeof content === 'string' && content.trim() !== '') {
         const title = this.title
         const article = {
           title,

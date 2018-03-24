@@ -92,6 +92,7 @@ const actions = {
         }
       }
 
+      commit('UPDATE_ARTICLES', articles)
       router.push({ name: 'Content', params: { articleId, showMsg: true } })
     } else {
       for (const [index, article] of articles.entries()) {
@@ -101,10 +102,9 @@ const actions = {
         }
       }
 
+      commit('UPDATE_ARTICLES', articles)
       router.push({ name: 'Home', params: { showMsg: true } })
     }
-
-    commit('UPDATE_ARTICLES', articles)
   }
 }
 
