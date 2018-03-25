@@ -11,6 +11,7 @@
     "deploy": "git subtree push --prefix dist heroku master"
   },
   "dependencies": {
+    "animate.css": "^3.6.1",
     "bootstrap-sass": "^3.3.7",
     "font-awesome": "^4.7.0",
     "highlight.js": "^9.12.0",

@@ -81,7 +81,7 @@ export default {
         const user = {
           name: this.username,
           password: this.password,
-          avatar: `http://via.placeholder.com/200/333/fff?text=${this.username[0].toUpperCase()}`
+          avatar: `https://placeholdit.imgix.net/~text?txtsize=100&w=200&h=200&txt=${this.username[0].toUpperCase()}`
         }
         const localUser = this.$store.state.user
 
