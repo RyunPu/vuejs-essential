@@ -5,7 +5,7 @@
   "author": "Yuanmin Pu <ryunpu@163.com>",
   "private": true,
   "scripts": {
-    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
+    "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js --host 0.0.0.0",
     "start": "npm run dev",
     "build": "node build/build.js",
     "deploy": "git subtree push --prefix dist heroku master"
@@ -17,6 +17,7 @@
     "highlight.js": "^9.12.0",
     "moment": "^2.21.0",
     "node-emoji": "^1.8.1",
+    "qrcode.vue": "^1.5.2",
     "simplemde": "^1.11.2",
     "sweetalert2": "^7.16.0",
     "vue": "^2.5.2",
