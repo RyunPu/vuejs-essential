@@ -64,7 +64,7 @@ export default {
         showCancelButton: true,
         confirmButtonColor: 'rgb(140,212,245)',
         cancelButtonColor: 'rgb(193,193,193)',
-        confirmButtonText: '退出',
+        confirmButtonText: '退出'
       }).then((res) => {
         if (res.value) {
           this.logout()

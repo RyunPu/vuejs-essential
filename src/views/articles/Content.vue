@@ -40,6 +40,56 @@
       </div>
     </div>
 
+    <div class="replies panel panel-default list-panel replies-index">
+      <div class="panel-heading">
+        <div class="total">
+          回复数量: <b>{{ comments.length }}</b>
+        </div>
+      </div>
+      <div class="panel-body">
+        <transition-group id="reply-list" name="fade" tag="ul" class="list-group row">
+          <li v-for="(comment, index) in comments" :key="comment.commentId" class="list-group-item media">
+            <div class="avatar avatar-container pull-left">
+              <router-link :to="`/${comment.uname}`">
+                <img :src="comment.uavatar" class="media-object img-thumbnail avatar avatar-middle">
+              </router-link>
+            </div>
+            <div class="infos">
+              <div class="media-heading">
+                <router-link :to="`/${comment.uname}`" class="remove-padding-left author rm-link-color">
+                  {{ comment.uname }}
+                </router-link>
+                <div class="meta">
+                  <a :id="`reply${index + 1}`" :href="`#reply${index + 1}`" class="anchor">#{{ index + 1 }}</a>
+                  <span> ⋅ </span>
+                  <abbr class="timeago">
+                    {{ comment.date | moment('from', { startOf: 'second' }) }}
+                  </abbr>
+                </div>
+              </div>
+
+              <div class="preview media-body markdown-reply markdown-body" v-html="comment.content"></div>
+            </div>
+          </li>
+        </transition-group>
+        <div v-show="!comments.length" class="empty-block">
+          暂无评论~~
+        </div>
+      </div>
+    </div>
+
+    <div class="reply-box form box-block">
+      <div class="form-group comment-editor">
+        <textarea v-if="auth" id="editor"></textarea>
+        <textarea v-else disabled class="form-control" placeholder="需要登录后才能发表评论." style="height:172px"></textarea>
+      </div>
+      <div class="form-group reply-post-submit">
+        <button id="reply-btn" :disabled="!auth" @click="comment" class="btn btn-primary">回复</button>
+        <span class="help-inline">Ctrl+Enter</span>
+      </div>
+      <div v-show="commentHtml" id="preview-box" class="box preview markdown-body" v-html="commentHtml"></div>
+    </div>
+
     <Modal :show.sync="showQrcode" class="text-center">
       <div v-if="user" slot="title">
         <img :src="user.avatar" class="img-thumbnail avatar" width="48">
@@ -65,6 +115,8 @@ import emoji from 'node-emoji'
 import { mapState } from 'vuex'
 import QrcodeVue from 'qrcode.vue'
 
+window.hljs = hljs
+
 export default {
   name: 'Content',
   components: {
@@ -77,7 +129,10 @@ export default {
       date: '',
       votes: [],
       voteClass: '',
-      showQrcode: false
+      showQrcode: false,
+      commentMarkdown: '',
+      commentHtml: '',
+      comments: []
     }
   },
   computed: mapState([
@@ -90,7 +145,7 @@ export default {
     const post = this.$store.getters.getArticleById(articleId)
 
     if (post) {
-      let { title, content, date, votes } = post[0]
+      let { title, content, date, votes, comments } = post[0]
 
       this.title = title
       this.date = date
@@ -98,6 +153,7 @@ export default {
       this.content = SimpleMDE.prototype.markdown(content)
       this.votes = votes ? votes : []
       this.voteClass = this.votes.length ? 'active' : ''
+      this.renderComments(comments)
 
       this.$nextTick(() => {
         this.$el.querySelectorAll('pre code').forEach((el) => {
@@ -108,16 +164,72 @@ export default {
 
     this.articleId = articleId
   },
+  mounted() {
+    if (this.auth) {
+      const simplemde = new SimpleMDE({
+        element: document.querySelector('#editor'),
+        placeholder: '请使用 Markdown 格式书写 ;-)，代码片段黏贴时请注意使用高亮语法。',
+        spellChecker: false,
+        autoDownloadFontAwesome: false,
+        toolbar: false,
+        status: false,
+        renderingConfig: {
+          codeSyntaxHighlighting: true
+        }
+      })
+
+      simplemde.codemirror.on('change', () => {
+        this.commentMarkdown = simplemde.value()
+        this.commentHtml = simplemde.markdown(emoji.emojify(this.commentMarkdown, name => name))
+      })
+
+      simplemde.codemirror.on('keyup', (codemirror, event) => {
+        if (event.ctrlKey && event.keyCode === 13) {
+          this.comment()
+        }
+      })
+
+      this.simplemde = simplemde
+    }
+  },
   methods: {
+    comment() {
+      if (this.commentMarkdown && this.simplemde) {
+        this.$store.dispatch('comment', {
+          comment: {
+            uid: 1,
+            uname: this.user.name,
+            content: this.commentMarkdown,
+            uavatar: this.user.avatar
+          },
+          articleId: this.articleId
+        }).then(this.renderComments)
+
+        this.simplemde.value('')
+        document.querySelector('#reply-btn').focus()
+
+        this.$nextTick(() => {
+          document.querySelector('#reply-list li:last-child').scrollIntoView(true)
+        })
+      }
+    },
+    renderComments(comments) {
+      if (Array.isArray(comments)) {
+        for (const [index, comment] of comments.entries()) {
+          comment.content = SimpleMDE.prototype.markdown(emoji.emojify(comment.content, name => name))
+        }
+
+        this.comments = comments
+      }
+    },
     vote(e) {
       if (!this.auth) {
         this.$swal({
           text: '需要登录以后才能执行此操作。',
-          type: 'warning',
           showCancelButton: true,
           confirmButtonColor: 'rgb(140,212,245)',
           cancelButtonColor: 'rgb(193,193,193)',
-          confirmButtonText: '前往登录',
+          confirmButtonText: '前往登录'
         }).then((res) => {
           if (res.value) {
             this.$router.push('/auth/login')
@@ -130,10 +242,14 @@ export default {
 
         if (active) {
           this.voteClass = ''
-          this.$store.dispatch('vote', { articleId })
+          this.$store.dispatch('vote', { articleId }).then((votes) => {
+            this.votes = votes
+          })
         } else {
           this.voteClass = 'active animated rubberBand'
-          this.$store.dispatch('vote', { articleId, like: true })
+          this.$store.dispatch('vote', { articleId, like: true }).then((votes) => {
+            this.votes = votes
+          })
         }
       }
     },
@@ -147,7 +263,7 @@ export default {
         showCancelButton: true,
         confirmButtonColor: 'rgb(140,212,245)',
         cancelButtonColor: 'rgb(193,193,193)',
-        confirmButtonText: '删除',
+        confirmButtonText: '删除'
       }).then((res) => {
         if (res.value) {
           this.$store.dispatch('post', { articleId: this.articleId })
@@ -159,6 +275,8 @@ export default {
 </script>
 
 <style scoped>
+.fade-enter-active, .fade-leave-active { transition: opacity .5s;}
+.fade-enter, .fade-leave-to { opacity: 0;}
 .payment-qrcode h5 { margin: 1.5em 0;}
 .payment-qrcode img { width: 160px; height: 160px;}
 </style>
