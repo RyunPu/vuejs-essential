@@ -59,6 +59,13 @@
                 <router-link :to="`/${comment.uname}`" class="remove-padding-left author rm-link-color">
                   {{ comment.uname }}
                 </router-link>
+                <span v-if="user" class="operate pull-right">
+                  <template v-if="comment.uid === 1">
+                    <a href="javascript:;" @click="editComment(comment.commentId, index)"><i class="fa fa-edit"></i></a>
+                    <span> ⋅ </span>
+                    <a href="javascript:;" @click="deleteComment(comment.commentId)"><i class="fa fa-trash-o"></i></a>
+                  </template>
+                </span>
                 <div class="meta">
                   <a :id="`reply${index + 1}`" :href="`#reply${index + 1}`" class="anchor">#{{ index + 1 }}</a>
                   <span> ⋅ </span>
@@ -84,8 +91,11 @@
         <textarea v-else disabled class="form-control" placeholder="需要登录后才能发表评论." style="height:172px"></textarea>
       </div>
       <div class="form-group reply-post-submit">
-        <button id="reply-btn" :disabled="!auth" @click="comment" class="btn btn-primary">回复</button>
-        <span class="help-inline">Ctrl+Enter</span>
+        <button id="reply-btn" :disabled="!auth" @click="comment" class="btn btn-primary">
+          {{ isEditComment ? '保存编辑' : '回复' }}
+        </button>
+        <span v-show="isEditComment" class="help-inline btn-cancel" @click="cancelEditComment">取消编辑</span>
+        <span v-show="!isEditComment" class="help-inline">Ctrl+Enter</span>
       </div>
       <div v-show="commentHtml" id="preview-box" class="box preview markdown-body" v-html="commentHtml"></div>
     </div>
@@ -132,7 +142,8 @@ export default {
       showQrcode: false,
       commentMarkdown: '',
       commentHtml: '',
-      comments: []
+      comments: [],
+      isEditComment: false
     }
   },
   computed: mapState([
@@ -153,6 +164,7 @@ export default {
       this.content = SimpleMDE.prototype.markdown(content)
       this.votes = votes ? votes : []
       this.voteClass = this.votes.length ? 'active' : ''
+      this.articleId = articleId
       this.renderComments(comments)
 
       this.$nextTick(() => {
@@ -193,8 +205,49 @@ export default {
     }
   },
   methods: {
+    cancelEditComment() {
+      this.simplemde.value('')
+      this.isEditComment = false
+
+      this.$nextTick(() => {
+        document.querySelector(`#reply-list li:nth-child(${this.commentIndex})`).scrollIntoView(true)
+      })
+    },
+    editComment(commentId, commentIndex) {
+      const simplemde = this.simplemde
+      const codemirror = simplemde.codemirror
+      const comments = this.commentsMarkdown
+
+      if (Array.isArray(comments)) {
+        for (const [index, comment] of comments.entries()) {
+          if (parseInt(comment.commentId) === parseInt(commentId)) {
+            simplemde.value(comment.content)
+            codemirror.focus()
+            this.isEditComment = true
+            this.commentIndex = commentIndex + 1
+            this.commentId = commentId
+            break
+          }
+        }
+      }
+    },
+    deleteComment(commentId) {
+      this.$swal({
+        text: '你确定要删除此评论吗?',
+        confirmButtonText: '删除'
+      }).then((res) => {
+        if (res.value) {
+          this.$store.dispatch('comment', {
+            commentId,
+            articleId: this.articleId
+          }).then(this.renderComments)
+        }
+      })
+    },
     comment() {
       if (this.commentMarkdown && this.simplemde) {
+        const commentId = this.isEditComment && this.commentId
+
         this.$store.dispatch('comment', {
           comment: {
             uid: 1,
@@ -202,33 +255,38 @@ export default {
             content: this.commentMarkdown,
             uavatar: this.user.avatar
           },
-          articleId: this.articleId
+          articleId: this.articleId,
+          commentId
         }).then(this.renderComments)
 
-        this.simplemde.value('')
-        document.querySelector('#reply-btn').focus()
+        if (this.isEditComment) {
+          this.cancelEditComment()
+        } else {
+          this.simplemde.value('')
+          document.querySelector('#reply-btn').focus()
 
-        this.$nextTick(() => {
-          document.querySelector('#reply-list li:last-child').scrollIntoView(true)
-        })
+          this.$nextTick(() => {
+            document.querySelector('#reply-list li:last-child').scrollIntoView(true)
+          })
+        }
       }
     },
     renderComments(comments) {
       if (Array.isArray(comments)) {
-        for (const [index, comment] of comments.entries()) {
+        const newComments = comments.map(comment => ({ ...comment }))
+
+        for (const [index, comment] of newComments.entries()) {
           comment.content = SimpleMDE.prototype.markdown(emoji.emojify(comment.content, name => name))
         }
 
-        this.comments = comments
+        this.commentsMarkdown = comments
+        this.comments = newComments
       }
     },
     vote(e) {
       if (!this.auth) {
         this.$swal({
           text: '需要登录以后才能执行此操作。',
-          showCancelButton: true,
-          confirmButtonColor: 'rgb(140,212,245)',
-          cancelButtonColor: 'rgb(193,193,193)',
           confirmButtonText: '前往登录'
         }).then((res) => {
           if (res.value) {
@@ -259,10 +317,6 @@ export default {
     deleteArticle() {
       this.$swal({
         text: '你确定要删除此内容吗?',
-        type: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: 'rgb(140,212,245)',
-        cancelButtonColor: 'rgb(193,193,193)',
         confirmButtonText: '删除'
       }).then((res) => {
         if (res.value) {
@@ -279,4 +333,5 @@ export default {
 .fade-enter, .fade-leave-to { opacity: 0;}
 .payment-qrcode h5 { margin: 1.5em 0;}
 .payment-qrcode img { width: 160px; height: 160px;}
+.btn-cancel { cursor: pointer;}
 </style>

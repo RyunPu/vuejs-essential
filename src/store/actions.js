@@ -49,6 +49,13 @@ export const comment = ({ commit, state }, { comment, articleId, commentId }) =>
             }
           }
         }
+      } else {
+        for (const [index, comment] of comments.entries()) {
+          if (parseInt(comment.commentId) === parseInt(commentId)) {
+            comments.splice(index, 1)
+            break
+          }
+        }
       }
 
       newArticle.comments = comments
