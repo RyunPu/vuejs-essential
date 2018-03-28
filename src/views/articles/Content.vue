@@ -11,7 +11,7 @@
           <div class="markdown-body" v-html="content"></div>
 
           <div class="panel-footer operate">
-            <div v-if="auth" class="actions">
+            <div v-if="auth && uid === 1" class="actions">
               <a @click="deleteArticle" class="admin" href="javascript:;"><i class="fa fa-trash-o"></i></a>
               <a @click="editArticle" class="admin" href="javascript:;"><i class="fa fa-pencil-square-o"></i></a>
             </div>
@@ -143,7 +143,7 @@ export default {
       commentMarkdown: '',
       commentHtml: '',
       comments: [],
-      isEditComment: false
+      isEditComment: false,
     }
   },
   computed: mapState([
@@ -156,14 +156,15 @@ export default {
     const post = this.$store.getters.getArticleById(articleId)
 
     if (post) {
-      let { title, content, date, votes, comments } = post[0]
+      let { title, content, date, votes, comments, uid } = post[0]
 
       this.title = title
       this.date = date
       content = emoji.emojify(content, name => name)
       this.content = SimpleMDE.prototype.markdown(content)
       this.votes = votes ? votes : []
-      this.voteClass = this.votes.length ? 'active' : ''
+      this.voteClass = this.votes.some(vote => vote.uid === 1) ? 'active' : ''
+      this.uid = uid
       this.articleId = articleId
       this.renderComments(comments)
 
@@ -198,6 +199,8 @@ export default {
       simplemde.codemirror.on('keyup', (codemirror, event) => {
         if (event.ctrlKey && event.keyCode === 13) {
           this.comment()
+        } else if (this.isEditComment && event.keyCode === 27) {
+          this.cancelEditComment()
         }
       })
 
@@ -241,6 +244,7 @@ export default {
             commentId,
             articleId: this.articleId
           }).then(this.renderComments)
+          this.cancelEditComment()
         }
       })
     },

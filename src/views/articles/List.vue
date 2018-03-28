@@ -12,7 +12,7 @@
 
         <ul class="list-group">
           <li v-for="article in articles" class="list-group-item">
-            <img v-if="avatar" :src="avatar" class="avatar avatar-small">
+            <img v-if="article.avatar || avatar" :src="article.avatar || avatar" class="avatar avatar-small">
             <i v-else class="fa fa-user-circle avatar avatar-small"></i>
             <router-link :to="`/articles/${article.articleId}/content`" class="title">
               {{ article.title }}
@@ -32,14 +32,23 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'List',
+  data() {
+    return {
+      articles: []
+    }
+  },
   computed: {
     avatar() {
       return this.user && this.user.avatar
     },
     ...mapState([
-      'user',
-      'articles'
+      'user'
     ])
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.articles = vm.$store.getters.getArticlesByUid(null, to.params.user)
+    })
   }
 }
 </script>

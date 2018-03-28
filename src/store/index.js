@@ -23,10 +23,23 @@ const getters = {
       return null
     }
   },
-  getArticlesByUid: (state) => (uid) => {
+  getArticlesByUid: (state) => (uid, user) => {
     let articles = state.articles
 
     if (Array.isArray(articles)) {
+      if (user) {
+        if (state.user && state.user.name === user) {
+          uid = 1
+        } else {
+          for (const [index, article] of articles.entries()) {
+            if (article.uname === user) {
+              uid = article.uid
+              break
+            }
+          }
+        }
+      }
+
       articles = articles.filter(article => parseInt(uid) === parseInt(article.uid))
       return articles.length ? articles : null
     } else {

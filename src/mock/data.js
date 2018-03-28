@@ -3,6 +3,8 @@ import ls from '../utils/localStorage'
 
 const Random = Mock.Random
 const localArticles = ls.getItem('articles')
+const localUser = ls.getItem('user')
+const userName = localUser ? localUser.name : null
 let lastArticleId = 1
 
 if (Array.isArray(localArticles)) {
@@ -12,12 +14,11 @@ if (Array.isArray(localArticles)) {
 export const mockArticles = (num = 20) => {
   let articles = []
   let unames = []
-  let ids = []
 
   const arr = [...Array(num)].map((article, index) => {
     let uname = Random.first()
 
-    while (unames.indexOf(uname) !== -1) {
+    while (unames.indexOf(uname) !== -1 || uname === userName) {
       uname = Random.first()
     }
 

@@ -7,7 +7,8 @@
           <div class="panel-body text-center topic-author-box blog-info">
             <div class="image blog-cover">
               <router-link :to="`/${userName}`">
-                <img v-if="columnPic" :src="columnPic" class="avatar-112 avatar img-thumbnail">
+                <img v-if="articles && articles.length" :src="articles[0].avatar || columnPic" class="avatar-112 avatar img-thumbnail">
+                <img v-else-if="columnPic" :src="columnPic" class="avatar-112 avatar img-thumbnail">
                 <i v-else class="fa fa-user-circle avatar-100 avatar img-thumbnail"></i>
               </router-link>
             </div>
@@ -32,10 +33,13 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'Column',
+  data() {
+    return {
+      articles: [],
+      userName: ''
+    }
+  },
   computed: {
-    userName() {
-      return this.user && this.user.name
-    },
     columnPic() {
       return this.user && (this.user.columnPic || this.user.avatar)
     },
@@ -43,9 +47,35 @@ export default {
       return this.articles ? this.articles.length : 0
     },
     ...mapState([
-      'user',
-      'articles'
+      'user'
     ])
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      const user = to.params.user
+      const articleId = to.params.articleId
+      const post = vm.$store.getters.getArticleById(articleId)
+
+      if (post) {
+        vm.articles = vm.$store.getters.getArticlesByUid(post[0].uid)
+        vm.userName = post[0].uname || vm.user.name
+      } else if (user) {
+        vm.getData(user)
+      }
+    })
+  },
+  watch: {
+    '$route'(to) {
+      this.getData(to.params.user)
+    }
+  },
+  methods: {
+    getData(user) {
+      if (user) {
+        this.articles = this.$store.getters.getArticlesByUid(null, user)
+        this.userName = user
+      }
+    }
   }
 }
 </script>
