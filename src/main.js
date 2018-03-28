@@ -7,6 +7,18 @@ import Message from './plugins/message'
 import './directives'
 import './components'
 import './filters'
+import { mockArticles } from './mock/data'
+
+// 是否加入测试数据
+const addMockData = true
+const userArticles = store.getters.getArticlesByUid(1)
+const localArticles = userArticles ? userArticles : []
+
+if (addMockData) {
+  store.commit('UPDATE_ARTICLES', [...localArticles, ...mockArticles(10)])
+} else {
+  store.commit('UPDATE_ARTICLES', localArticles)
+}
 
 Vue.use(VueSweetalert2)
 Vue.use(Message)

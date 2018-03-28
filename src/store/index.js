@@ -22,6 +22,16 @@ const getters = {
     } else {
       return null
     }
+  },
+  getArticlesByUid: (state) => (uid) => {
+    let articles = state.articles
+
+    if (Array.isArray(articles)) {
+      articles = articles.filter(article => parseInt(uid) === parseInt(article.uid))
+      return articles.length ? articles : null
+    } else {
+      return null
+    }
   }
 }
 
