@@ -15,6 +15,8 @@ export const mockArticles = (num = 20) => {
   let articles = []
   let unames = []
 
+  num = num > 60 ? 60 : num
+
   const arr = [...Array(num)].map((article, index) => {
     let uname = Random.first()
 
@@ -29,7 +31,7 @@ export const mockArticles = (num = 20) => {
       uid: index + 2,
       uname: uname,
       title: Random.ctitle(10, 20),
-      content: Random.cparagraph(5, 10),
+      content: Random.cparagraph(3, 5),
       avatar: `https://api.adorable.io/avatars/200/${uname}.png`,
       date: new Date(),
       votes: [],

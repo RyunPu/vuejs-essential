@@ -15,7 +15,7 @@ const userArticles = store.getters.getArticlesByUid(1)
 const localArticles = userArticles ? userArticles : []
 
 if (addMockData) {
-  store.commit('UPDATE_ARTICLES', [...localArticles, ...mockArticles(10)])
+  store.commit('UPDATE_ARTICLES', [...localArticles, ...mockArticles(60)])
 } else {
   store.commit('UPDATE_ARTICLES', localArticles)
 }

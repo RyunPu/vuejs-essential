@@ -6,11 +6,9 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <ul class="list-inline topic-filter">
-            <li><router-link v-title="'最后回复排序'" id="default-filter" to="/topics?filter=default">活跃</router-link></li>
-            <li><router-link v-title="'只看加精的话题'" to="/topics?filter=excellent">精华</router-link></li>
-            <li><router-link v-title="'点赞数排序'" to="/topics?filter=vote">投票</router-link></li>
-            <li><router-link v-title="'发布时间排序'" to="/topics?filter=recent">最近</router-link></li>
-            <li><router-link v-title="'无人问津的话题'" to="/topics?filter=noreply">零回复</router-link></li>
+            <li v-for="item in filters">
+              <router-link v-title="item.title" :class="{ active: filter === item.filter }" :to="`/topics?filter=${item.filter}`">{{ item.name }}</router-link>
+            </li>
           </ul>
           <div class="clearfix"></div>
         </div>
@@ -38,6 +36,10 @@
             </li>
           </ul>
         </div>
+
+				<div class="panel-footer text-right remove-padding-horizontal pager-footer">
+          <Pagination :currentPage="currentPage" :total="total" :pageSize="pageSize" :onPageChange="changePage" />
+				</div>
       </div>
     </div>
   </div>
@@ -45,15 +47,29 @@
 
 <script>
 import { mapState } from 'vuex'
+import Pagination from '@/components/Pagination'
 
 export default {
   name: 'Home',
+  components: {
+    Pagination
+  },
   data() {
     return {
       msgShow: false,
       msgType: '',
       msg: '',
-      articles: null
+      articles: null,
+      filter: 'default',
+      filters: [
+        { filter: 'default', name: '活跃', title: '最后回复排序'},
+        { filter: 'excellent', name: '精华', title: '只看加精的话题'},
+        { filter: 'vote', name: '投票', title: '点赞数排序'},
+        { filter: 'recent', name: '最近', title: '发布时间排序'},
+        { filter: 'noreply', name: '零回复', title: '无人问津的话题'}
+      ],
+      total: 0,
+      pageSize: 10,
     }
   },
   computed: {
@@ -63,7 +79,10 @@ export default {
     ...mapState([
       'auth',
       'user'
-    ])
+    ]),
+    currentPage() {
+      return parseInt(this.$route.query.page) || 1
+    }
   },
   beforeRouteEnter(to, from, next) {
     const name = from.name
@@ -95,15 +114,20 @@ export default {
     }
   },
   methods: {
+    changePage(page) {
+      this.$router.push({ query: { ...this.$route.query, page } })
+    },
     initFilter(filter) {
+      const page = this.$route.query.page || 1
+
       if (!filter) {
         filter = 'default'
-        this.$nextTick(() => {
-          document.querySelector('#default-filter').classList.add('active')
-        })
       }
 
-      this.articles = this.$store.getters.getArticlesByFilter(filter)
+      this.filter = filter
+      this.totalArticles = this.$store.getters.getArticlesByFilter(filter)
+      this.articles = this.totalArticles.slice(10 * (page - 1), 10 * page)
+      this.total = this.totalArticles.length
     },
     showMsg(msg, type = 'success') {
       this.msgType = type
