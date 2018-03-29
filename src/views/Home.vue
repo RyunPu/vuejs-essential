@@ -6,11 +6,11 @@
       <div class="panel panel-default">
         <div class="panel-heading">
           <ul class="list-inline topic-filter">
-            <li><router-link id="default-filter" to="/topics?filter=default">活跃</router-link></li>
-            <li><router-link to="/topics?filter=excellent">精华</router-link></li>
-            <li><router-link to="/topics?filter=vote">投票</router-link></li>
-            <li><router-link to="/topics?filter=recent">最近</router-link></li>
-            <li><router-link to="/topics?filter=noreply">零回复</router-link></li>
+            <li><router-link v-title="'最后回复排序'" id="default-filter" to="/topics?filter=default">活跃</router-link></li>
+            <li><router-link v-title="'只看加精的话题'" to="/topics?filter=excellent">精华</router-link></li>
+            <li><router-link v-title="'点赞数排序'" to="/topics?filter=vote">投票</router-link></li>
+            <li><router-link v-title="'发布时间排序'" to="/topics?filter=recent">最近</router-link></li>
+            <li><router-link v-title="'无人问津的话题'" to="/topics?filter=noreply">零回复</router-link></li>
           </ul>
           <div class="clearfix"></div>
         </div>
@@ -52,7 +52,8 @@ export default {
     return {
       msgShow: false,
       msgType: '',
-      msg: ''
+      msg: '',
+      articles: null
     }
   },
   computed: {
@@ -61,8 +62,7 @@ export default {
     },
     ...mapState([
       'auth',
-      'user',
-      'articles'
+      'user'
     ])
   },
   beforeRouteEnter(to, from, next) {
@@ -102,6 +102,8 @@ export default {
           document.querySelector('#default-filter').classList.add('active')
         })
       }
+
+      this.articles = this.$store.getters.getArticlesByFilter(filter)
     },
     showMsg(msg, type = 'success') {
       this.msgType = type

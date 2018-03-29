@@ -213,7 +213,9 @@ export default {
       this.isEditComment = false
 
       this.$nextTick(() => {
-        document.querySelector(`#reply-list li:nth-child(${this.commentIndex})`).scrollIntoView(true)
+        const commentIndex = this.commentIndex || 1
+        const currentComment = document.querySelector(`#reply-list li:nth-child(${commentIndex})`)
+        if (currentComment) currentComment.scrollIntoView(true)
       })
     },
     editComment(commentId, commentIndex) {
@@ -270,7 +272,8 @@ export default {
           document.querySelector('#reply-btn').focus()
 
           this.$nextTick(() => {
-            document.querySelector('#reply-list li:last-child').scrollIntoView(true)
+            const lastComment = document.querySelector('#reply-list li:last-child')
+            if (lastComment) lastComment.scrollIntoView(true)
           })
         }
       }
