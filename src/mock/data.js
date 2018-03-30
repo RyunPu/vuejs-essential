@@ -7,7 +7,7 @@ const localUser = ls.getItem('user')
 const userName = localUser ? localUser.name : null
 let lastArticleId = 1
 
-if (Array.isArray(localArticles)) {
+if (Array.isArray(localArticles) && localArticles.length) {
   lastArticleId = localArticles[localArticles.length - 1].articleId + 1
 }
 

@@ -69,7 +69,7 @@ export default {
         { filter: 'noreply', name: '零回复', title: '无人问津的话题'}
       ],
       total: 0,
-      pageSize: 10,
+      pageSize: 10
     }
   },
   computed: {
@@ -118,16 +118,20 @@ export default {
       this.$router.push({ query: { ...this.$route.query, page } })
     },
     initFilter(filter) {
-      const page = this.$route.query.page || 1
-
       if (!filter) {
         filter = 'default'
       }
 
       this.filter = filter
-      this.totalArticles = this.$store.getters.getArticlesByFilter(filter)
-      this.articles = this.totalArticles.slice(10 * (page - 1), 10 * page)
-      this.total = this.totalArticles.length
+
+      const page = this.$route.query.page || 1
+      const pageSize = this.pageSize || 10
+      const totalArticles = this.$store.getters.getArticlesByFilter(filter)
+
+      if (Array.isArray(totalArticles)) {
+        this.articles = totalArticles.slice(pageSize * (page - 1), pageSize * page)
+        this.total = totalArticles.length
+      }
     },
     showMsg(msg, type = 'success') {
       this.msgType = type
