@@ -42,17 +42,21 @@
 				</div>
       </div>
     </div>
+
+    <Sidebar/>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import Pagination from '@/components/Pagination'
+import Sidebar from '@/components/layouts/Sidebar'
 
 export default {
   name: 'Home',
   components: {
-    Pagination
+    Pagination,
+    Sidebar
   },
   data() {
     return {
