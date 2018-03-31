@@ -8,6 +8,14 @@ import './directives'
 import './components'
 import './filters'
 import { mockArticles } from './mock/data'
+import './mock/api'
+import VueResource from 'vue-resource'
+
+Vue.use(VueResource)
+Vue.use(VueSweetalert2)
+Vue.use(Message)
+
+Vue.config.productionTip = false
 
 // 是否加入测试数据
 const addMockData = true
@@ -15,15 +23,10 @@ const userArticles = store.getters.getArticlesByUid(1)
 const localArticles = userArticles ? userArticles : []
 
 if (addMockData) {
-  store.commit('UPDATE_ARTICLES', [...localArticles, ...mockArticles(60)])
+  store.commit('UPDATE_ARTICLES', [...localArticles, ...mockArticles(30)])
 } else {
   store.commit('UPDATE_ARTICLES', localArticles)
 }
-
-Vue.use(VueSweetalert2)
-Vue.use(Message)
-
-Vue.config.productionTip = false
 
 /* eslint-disable no-new */
 new Vue({

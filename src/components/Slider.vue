@@ -76,6 +76,7 @@ export default {
 <style scoped>
 .carousel {margin-top:4px;padding-bottom:30px;}
 .carousel-inner > div {min-height:177px;}
+@media (min-width: 1200px){.carousel-inner > div {min-height:228px;}}
 .carousel-indicators {bottom:0;border-radius: 12px;background-color: hsla(0,0%,100%,.3);margin-bottom: 0px;padding: 4px 8px;}
 .carousel-indicators li {margin:0 3px;border:1px solid #ff8580;background-color: #f4665f;}
 </style>

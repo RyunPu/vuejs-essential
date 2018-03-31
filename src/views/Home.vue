@@ -37,9 +37,9 @@
           </ul>
         </div>
 
-				<div class="panel-footer text-right remove-padding-horizontal pager-footer">
+        <div class="panel-footer text-right remove-padding-horizontal pager-footer">
           <Pagination :currentPage="currentPage" :total="total" :pageSize="pageSize" :onPageChange="changePage" />
-				</div>
+        </div>
       </div>
     </div>
 

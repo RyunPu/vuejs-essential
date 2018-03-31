@@ -1,0 +1,21 @@
+import Mock from 'mockjs'
+import ls from '../utils/localStorage'
+
+Mock.mock('/users/active', 'get', () => {
+  const localArticles = ls.getItem('articles')
+  let articles = Array.isArray(localArticles) ? localArticles : []
+  let comments = []
+
+  articles.map((article) => {
+    comments = [...comments, ...(Array.isArray(article.comments) ? article.comments : [])]
+  })
+
+  comments = comments.reduce((a, c) => {
+    a[c.uname] = a[c.uname] || {}
+    a[c.uname].num = ++a[c.uname].num || 1
+    a[c.uname].avatar = c.uavatar
+    return a
+  }, {})
+
+  return comments
+})
