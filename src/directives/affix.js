@@ -26,7 +26,10 @@ export default {
 
     window.addEventListener('scroll', el.affix, false)
     window.addEventListener('resize', el.affix, false)
-    setTimeout(() => el.affix(), 0)
+    window.dispatchEvent(new Event('scroll'))
+  },
+  update() {
+    window.dispatchEvent(new Event('scroll'))
   },
   unbind(el) {
     window.removeEventListener('scroll', el.affix, false)
