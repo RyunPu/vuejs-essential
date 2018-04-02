@@ -22,7 +22,10 @@
           </li>
         </ul>
 
-        <Auth/>
+        <div class="navbar-right">
+          <SearchInput/>
+          <Auth/>
+        </div>
       </div>
     </div>
   </div>
@@ -30,11 +33,13 @@
 
 <script>
 import Auth from '@/components/layouts/Auth'
+import SearchInput from '@/components/layouts/SearchInput'
 
 export default {
   name: 'TopicsHeader',
   components: {
-    Auth
+    Auth,
+    SearchInput
   },
   data() {
     return {

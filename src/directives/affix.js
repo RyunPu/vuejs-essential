@@ -2,11 +2,9 @@ export default {
   bind(el, binding, vnode) {
     const offset = parseInt(binding.value) || 0
     const elStyle = el.style.cssText
+    let affixed = false
 
     el.affix = () => {
-      el.classList.remove('affix')
-      el.style.cssText = elStyle
-
       const elWidth = el.offsetWidth
       const elHeight = el.offsetHeight
 
@@ -14,13 +12,18 @@ export default {
         return
       }
 
+      if (affixed) {
+        el.style.cssText = elStyle
+        affixed = false
+      }
+
       const rect = el.getBoundingClientRect()
       const initTop = rect.top + pageYOffset
       const initLeft = rect.left
 
-      if (window.innerWidth >= 992 && pageYOffset > initTop - offset) {
-        el.classList.add('affix')
-        el.style.cssText = `${elStyle};left:${initLeft}px;top:${offset}px;width:${elWidth}px`
+      if (!affixed && window.innerWidth >= 992 && pageYOffset > initTop - offset) {
+        el.style.cssText = `${elStyle};position:fixed;left:${initLeft}px;top:${offset}px;width:${elWidth}px`
+        affixed = true
       }
     }
 
