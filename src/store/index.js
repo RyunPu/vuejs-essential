@@ -27,7 +27,7 @@ const mutations = {
     state.articles = articles
     ls.setItem('articles', articles)
   },
-  UPDATE_SEARCHVALUE(state, searchValue) {
+  UPDATE_SEARCH_VALUE(state, searchValue) {
     state.searchValue = searchValue
   }
 }

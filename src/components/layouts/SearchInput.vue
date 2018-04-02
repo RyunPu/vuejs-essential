@@ -35,7 +35,7 @@ export default {
       const value = this.value
 
       if (value !== '') {
-        this.$store.commit('UPDATE_SEARCHVALUE', value)
+        this.$store.commit('UPDATE_SEARCH_VALUE', value)
         this.$router.push({ name: 'Search', query: { q: value } })
       }
     }
