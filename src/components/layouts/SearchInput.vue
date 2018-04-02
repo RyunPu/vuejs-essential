@@ -32,8 +32,11 @@ export default {
   },
   methods: {
     search() {
-      if (this.value !== '') {
-        console.log(this.searchValue)
+      const value = this.value
+
+      if (value !== '') {
+        this.$store.commit('UPDATE_SEARCH', value)
+        this.$router.push({ name: 'Search', query: { q: value } })
       }
     }
   }

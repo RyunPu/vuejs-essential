@@ -6,6 +6,11 @@ export default [
     component: () => import('@/views/Home')
   },
   {
+    path: '/search',
+    name: 'Search',
+    component: () => import('@/views/Search')
+  },
+  {
     path: '/auth/register',
     name: 'Register',
     component: () => import('@/views/auth/Register')
