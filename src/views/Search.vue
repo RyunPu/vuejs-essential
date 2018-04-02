@@ -18,21 +18,20 @@ export default {
   name: 'Search',
   beforeRouteEnter(to, from, next) {
     next(vm => {
-      vm.UPDATE_SEARCH(to.query.q || '')
+      vm.UPDATE_SEARCHVALUE(to.query.q || '')
     })
   },
   beforeRouteUpdate(to, from, next) {
-    console.log('aa')
-    this.UPDATE_SEARCH(to.query.q || '')
+    this.UPDATE_SEARCHVALUE(to.query.q || '')
     next()
   },
   beforeRouteLeave(to, from, next) {
-    this.UPDATE_SEARCH('')
+    this.UPDATE_SEARCHVALUE('')
     next()
   },
   methods: {
     ...mapMutations([
-      'UPDATE_SEARCH'
+      'UPDATE_SEARCHVALUE'
     ])
   }
 }
