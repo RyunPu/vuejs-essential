@@ -11,7 +11,8 @@ const state = {
   auth: ls.getItem('auth'),
   user: ls.getItem('user'),
   articles: ls.getItem('articles'),
-  searchValue: ''
+  searchValue: '',
+  origin: location.origin
 }
 
 const mutations = {

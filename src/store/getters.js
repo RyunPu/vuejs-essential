@@ -87,5 +87,30 @@ export default {
     }
 
     return filteredArticles
+  },
+  getArticlesByKeyword: (state) => (keyword) => {
+    let articles = state.articles
+
+    if (Array.isArray(articles)) {
+      let searchedArticles = []
+
+      articles.map((article) => {
+        let { title, content, uname, avatar, articleId } = article
+        const regex = new RegExp(`(${keyword})`, 'gi')
+
+        if (title.indexOf(keyword) !== -1 || content.indexOf(keyword) !== -1) {
+          const url = `${state.origin}/articles/${articleId}/content`
+          title = title.replace(regex, '<span class="highlight">$1</span>')
+          content = content.substr(0, 100).replace(regex, '<span class="highlight">$1</span>')
+          uname = uname || (state.user ? state.user.name : '佚名')
+          avatar = avatar || (state.user ? state.user.avatar : 'https://api.adorable.io/avatars/200/佚名.png')
+          searchedArticles.push({...article, ...{ title, content, uname, avatar, url }})
+        }
+      })
+
+      return searchedArticles
+    } else {
+      return null
+    }
   }
 }
