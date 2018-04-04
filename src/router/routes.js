@@ -6,11 +6,6 @@ export default [
     component: () => import('@/views/Home')
   },
   {
-    path: '/search',
-    name: 'Search',
-    component: () => import('@/views/Search')
-  },
-  {
     path: '/auth/register',
     name: 'Register',
     component: () => import('@/views/auth/Register')
@@ -55,6 +50,11 @@ export default [
     name: 'Edit',
     component: () => import('@/views/articles/Create'),
     meta: { auth: true }
+  },
+  {
+    path: '/search',
+    name: 'Search',
+    component: () => import('@/views/Search')
   },
   {
     path: '/:user',
