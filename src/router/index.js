@@ -6,6 +6,7 @@ Vue.use(Router)
 
 const router =  new Router({
   mode: 'history',
+  linkExactActiveClass: 'active',
   scrollBehavior(to, from, savedPosition) {
     if (to.hash) {
       return { selector: to.hash }

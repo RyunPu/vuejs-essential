@@ -47,9 +47,5 @@ export default {
 </script>
 
 <style scoped>
-.router-link-exact-active,.router-link-exact-active:hover,.router-link-exact-active:focus{
-  color: #fff;
-  background-color: #00b5ad;
-  border-color: #00b5ad;
-}
+
 </style>
