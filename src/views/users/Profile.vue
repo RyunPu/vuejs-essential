@@ -89,12 +89,15 @@ export default {
   },
   methods: {
     updateProfile() {
-      this.$store.dispatch('updateUser', {
-        name: this.username,
-        sex: this.sex,
-        hobbies: this.hobbies,
-        introduction: this.introduction
-      })
+      if (this.username) {
+        this.$store.dispatch('updateUser', {
+          name: this.username,
+          sex: this.sex,
+          hobbies: this.hobbies,
+          introduction: this.introduction
+        })
+        this.$message.show('修改成功')
+      }
     }
   }
 }
