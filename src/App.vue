@@ -21,7 +21,6 @@ export default {
 
   h1 {
     color: #42b983;
-    text-shadow: 0 0 1px #32495D;
   }
 }
 </style>
