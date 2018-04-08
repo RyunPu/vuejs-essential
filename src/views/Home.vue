@@ -16,6 +16,7 @@ export default {
   },
   beforeRouteEnter(to, from, next) {
     const fromName = from.name
+    const logout = to.params.logout
 
     next(vm => {
       if (vm.$store.state.auth) {
@@ -24,8 +25,22 @@ export default {
             vm.showMsg('注册成功')
             break
         }
+      } else if (logout) {
+        vm.showMsg('操作成功')
       }
     })
+  },
+  computed: {
+    auth() {
+      return this.$store.state.auth
+    }
+  },
+  watch: {
+    auth(value) {
+      if (!value) {
+        this.showMsg('操作成功')
+      }
+    }
   },
   methods: {
     showMsg(msg, type = 'success') {
