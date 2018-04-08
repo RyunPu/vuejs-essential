@@ -22,7 +22,7 @@ function validate(el, modifiers, bindingValue) {
   }
 
   if (defaultError) {
-    if (!error) {
+    if (error === undefined) {
       showError(el, defaultError)
     } else {
       showError(el, error)
@@ -36,7 +36,7 @@ function showError(el, error) {
   const parentElement = el.parentElement
   const errorElement = getErrorElement(el)
 
-  if (!error) {
+  if (error === undefined) {
     errorElement.style.display = 'none'
     parentElement.classList.remove('has-error')
   } else {

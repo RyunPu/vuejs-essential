@@ -2,7 +2,7 @@ function showTitle(element, title) {
   const popover = getPopover()
   const popoverStyle = popover.style
 
-  if (!title) {
+  if (title === undefined) {
     popoverStyle.display = 'none'
   } else {
     const elementRect = element.getBoundingClientRect()
