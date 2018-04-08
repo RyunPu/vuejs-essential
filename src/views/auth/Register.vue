@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     getCaptcha() {
-      const { tpl, captcha } = createCaptcha(1)
+      const { tpl, captcha } = createCaptcha()
 
       this.captchaTpl = tpl
       this.localCaptcha = captcha
