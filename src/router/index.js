@@ -11,7 +11,9 @@ const router =  new Router({
 })
 
 router.beforeEach((to, from, next) => {
-  const auth = router.app.$options.store.state.auth
+  const app = router.app
+  const store = app.$options.store
+  const auth = store.state.auth
 
   if (
     (auth && to.path.indexOf('/auth/') !== -1) ||
@@ -21,6 +23,8 @@ router.beforeEach((to, from, next) => {
   } else {
     next()
   }
+
+  app.$message.hide()
 })
 
 export default router

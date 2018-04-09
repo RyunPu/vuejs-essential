@@ -4,7 +4,7 @@
   		<div class="panel-body">
   			<h2><i class="fa fa-cog"></i> 编辑个人资料</h2>
         <hr>
-        <div class="form-horizontal" data-form>
+        <div class="form-horizontal" data-validator-form>
           <div class="form-group">
             <label class="col-sm-2 control-label">用户名</label>
             <div class="col-sm-6">
