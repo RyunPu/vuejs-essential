@@ -8,7 +8,7 @@
           <div class="form-group">
             <label class="col-sm-2 control-label">密 码</label>
             <div class="col-sm-6">
-              <input v-model.trim="password" id="password" v-validator.required="{ regex: /^\w{6,16}$/, hint: '密码要求 6 ~ 16 个单词字符' }" type="password" class="form-control" placeholder="请填写密码">
+              <input v-model.trim="password" id="password" v-validator.required="{ regex: /^\w{6,16}$/, error: '密码要求 6 ~ 16 个单词字符' }" type="password" class="form-control" placeholder="请填写密码">
             </div>
           </div>
           <div class="form-group">

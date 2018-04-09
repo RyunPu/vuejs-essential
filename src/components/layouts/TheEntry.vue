@@ -3,6 +3,19 @@
     <ul v-if="auth" class="nav navbar-nav github-login">
       <li>
         <a v-dropdown href="javascript:;">
+          <i class="fa fa-plus text-md"></i>
+        </a>
+        <ul class="dropdown-menu">
+          <li>
+            <router-link to="/articles/create">
+              <i class="fa fa-paint-brush text-md"></i>
+              创作文章
+            </router-link>
+          </li>
+        </ul>
+      </li>
+      <li>
+        <a v-dropdown href="javascript:;">
           <span v-if="user">
             <img :src="user.avatar" class="avatar-topnav">
             <span>{{ user.name }}</span>
