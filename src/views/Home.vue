@@ -1,5 +1,5 @@
 <template>
-  <div class="container main-container">
+  <div>
     <Message :show.sync="msgShow" :type="msgType" :msg="msg"/>
   </div>
 </template>

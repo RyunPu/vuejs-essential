@@ -15,6 +15,11 @@ export default [
     component: () => import('@/views/auth/Login')
   },
   {
+    path: '/users/1/edit',
+    name: 'EditUsers',
+    component: () => import('@/views/users/Edit.vue')
+  },
+  {
     path: '*',
     redirect: '/'
   }
