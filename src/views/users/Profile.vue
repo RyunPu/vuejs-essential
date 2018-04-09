@@ -91,6 +91,7 @@ export default {
           hobbies: this.hobbies,
           introduction: this.introduction
         })
+        this.$message.show('修改成功')
       }
     }
   }
