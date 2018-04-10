@@ -34,7 +34,6 @@ router.afterEach((to, from) => {
   const store = app.$options.store
   const showMsg = to.params.showMsg
 
-
   if (showMsg) {
     if (typeof showMsg === 'string') {
       app.$message.show(showMsg)
