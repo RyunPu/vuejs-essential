@@ -34,8 +34,8 @@ export default {
   name: 'Create',
   data() {
     return {
-      title: '', // 标题
-      content: '' // 内容
+      title: '', // 文章标题
+      content: '' // 文章内容
     }
   },
   mounted() {

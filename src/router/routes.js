@@ -45,6 +45,11 @@ export default [
     meta: { auth: true }
   },
   {
+    path: '/articles/:articleId/content',
+    name: 'Content',
+    component: () => import('@/views/articles/Content.vue')
+  },
+  {
     path: '*',
     redirect: '/'
   }
