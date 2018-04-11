@@ -108,7 +108,7 @@ export default {
           content
         }
 
-        this.$store.dispatch('post', { article })
+        this.$store.dispatch('post', { article, articleId: this.articleId })
         this.clearData()
       }
     },
