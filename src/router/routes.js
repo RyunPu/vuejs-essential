@@ -50,6 +50,12 @@ export default [
     component: () => import('@/views/articles/Content.vue')
   },
   {
+    path: '/articles/:articleId/edit',
+    name: 'Edit',
+    component: () => import('@/views/articles/Create'),
+    meta: { auth: true }
+  },
+  {
     path: '*',
     redirect: '/'
   }
