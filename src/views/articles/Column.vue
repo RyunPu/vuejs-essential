@@ -1,5 +1,5 @@
 <template>
-  <div class="container blog-container">
+  <div class="blog-container">
     <div class="blog-pages">
       <router-view/>
 
