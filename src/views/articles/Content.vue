@@ -19,6 +19,25 @@
         </div>
       </div>
     </div>
+
+    <div class="votes-container panel panel-default padding-md">
+      <div class="panel-body vote-box text-center">
+        <div class="btn-group">
+          <a @click="like" href="javascript:;" class="vote btn btn-primary popover-with-html" :class="likeClass">
+            <i class="fa fa-thumbs-up"></i> {{ likeClass ? '已赞' : '点赞' }}
+          </a>
+        </div>
+        <div class="voted-users">
+          <div class="user-lists">
+            <span v-for="user in likeUsers">
+              <img :src="user.avatar" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : user.uid === 1 }">
+            </span>
+          </div>
+          <div v-if="!likeUsers.length" class="vote-hint">成为第一个点赞的人吧 😄</div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
@@ -35,7 +54,9 @@ export default {
       title: '', // 文章标题
       content: '', // 文章内容
       date: '', // 文章创建时间
-      uid: 1 // 用户 ID
+      uid: 1, // 用户 ID
+      likeUsers: [], // 点赞用户
+      likeClass: '' // 点赞样式
     }
   },
   computed: {
@@ -49,11 +70,13 @@ export default {
     const article = this.$store.getters.getArticleById(articleId)
 
     if (article) {
-      let { title, content, date } = article
+      let { title, content, date, likeUsers } = article
 
       this.title = title
       this.content = SimpleMDE.prototype.markdown(emoji.emojify(content, name => name))
       this.date = date
+      this.likeUsers = likeUsers || []
+      this.likeClass = this.likeUsers.some(likeUser => likeUser.uid === 1) ? 'active' : ''
 
       this.$nextTick(() => {
         this.$el.querySelectorAll('pre code').forEach((el) => {
@@ -77,6 +100,34 @@ export default {
           this.$store.dispatch('post', { articleId: this.articleId })
         }
       })
+    },
+    like(e) {
+      if (!this.auth) {
+        this.$swal({
+          text: '需要登录以后才能执行此操作。',
+          confirmButtonText: '前往登录'
+        }).then((res) => {
+          if (res.value) {
+            this.$router.push('/auth/login')
+          }
+        })
+      } else {
+        const target = e.currentTarget
+        const active = target.classList.contains('active')
+        const articleId = this.articleId
+
+        if (active) {
+          this.likeClass = ''
+          this.$store.dispatch('like', { articleId }).then((likeUsers) => {
+            this.likeUsers = likeUsers
+          })
+        } else {
+          this.likeClass = 'active animated rubberBand'
+          this.$store.dispatch('like', { articleId, isAdd: true }).then((likeUsers) => {
+            this.likeUsers = likeUsers
+          })
+        }
+      }
     }
   }
 }
