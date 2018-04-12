@@ -26,6 +26,8 @@
           <a @click="like" href="javascript:;" class="vote btn btn-primary popover-with-html" :class="likeClass">
             <i class="fa fa-thumbs-up"></i> {{ likeClass ? '已赞' : '点赞' }}
           </a>
+          <div class="or"></div>
+          <button @click="showQrcode = true" class="btn btn-success"><i class="fa fa-heart"></i> 打赏</button>
         </div>
         <div class="voted-users">
           <div class="user-lists">
@@ -38,6 +40,22 @@
       </div>
     </div>
 
+		<Modal :show.sync="showQrcode" class="text-center">
+      <div v-if="user" slot="title">
+        <img :src="user.avatar" class="img-thumbnail avatar" width="48">
+      </div>
+      <div>
+        <p class="text-md">如果你想学习更多前端的知识，VuejsCaff.com 是个不错的开始</p>
+        <div class="payment-qrcode inline-block">
+          <h5>扫一扫打开 VuejsCaff.com</h5>
+          <p><qrcode-vue value="https://vuejscaff.com/" :size="160"></qrcode-vue></p>
+        </div>
+      </div>
+      <div slot="footer">
+        <div class="text-center">祝你学习愉快 :)</div>
+      </div>
+    </Modal>
+
   </div>
 </template>
 
@@ -46,9 +64,13 @@ import SimpleMDE from 'simplemde'
 import hljs from 'highlight.js'
 import emoji from 'node-emoji'
 import { mapState } from 'vuex'
+import QrcodeVue from 'qrcode.vue'
 
 export default {
   name: 'Content',
+  components: {
+    QrcodeVue
+  },
   data() {
     return {
       title: '', // 文章标题
@@ -56,7 +78,8 @@ export default {
       date: '', // 文章创建时间
       uid: 1, // 用户 ID
       likeUsers: [], // 点赞用户
-      likeClass: '' // 点赞样式
+      likeClass: '', // 点赞样式
+      showQrcode: false, // 是否显示打赏弹窗
     }
   },
   computed: {
