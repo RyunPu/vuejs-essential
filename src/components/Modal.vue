@@ -60,6 +60,6 @@ export default {
 </script>
 
 <style scoped>
-.animated { animation-duration: .3s;}
+.animated { animation-duration: .4s;}
 .fade-enter, .fade-leave-to { opacity: 0;}
 </style>

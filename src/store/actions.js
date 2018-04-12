@@ -87,3 +87,47 @@ export const like = ({ commit, state }, { articleId, isAdd }) => {
   commit('UPDATE_ARTICLES', articles)
   return likeUsers
 }
+
+export const comment = ({ commit, state }, { comment, articleId, commentId }) => {
+  let articles = state.articles
+  let comments = []
+
+  if (!Array.isArray(articles)) articles = []
+
+  for (let article of articles) {
+    if (parseInt(article.articleId) === parseInt(articleId)) {
+      comments = Array.isArray(article.comments) ? article.comments : comments
+
+      if (comment) {
+        const uid = 1
+        const { uname, uavatar, content } = comment
+        const date = new Date()
+
+        if (commentId === undefined) {
+          const lastComment = comments[comments.length - 1]
+
+          if (lastComment) {
+            commentId = parseInt(lastComment.commentId) + 1
+          } else {
+            commentId = comments.length + 1
+          }
+
+          comments.push({
+            uid,
+            commentId,
+            uname,
+            uavatar,
+            content,
+            date
+          })
+        }
+      }
+
+      article.comments = comments
+      break
+    }
+  }
+
+  commit('UPDATE_ARTICLES', articles)
+  return comments
+}

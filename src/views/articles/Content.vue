@@ -56,6 +56,56 @@
       </div>
     </Modal>
 
+    <div class="replies panel panel-default list-panel replies-index">
+      <div class="panel-heading">
+        <div class="total">
+          回复数量: <b>{{ comments.length }}</b>
+        </div>
+      </div>
+      <div class="panel-body">
+        <ul id="reply-list" class="list-group row">
+          <li v-for="(comment, index) in comments" :key="comment.commentId" class="list-group-item media">
+            <div class="avatar avatar-container pull-left">
+              <router-link :to="`/${comment.uname}`">
+                <img :src="comment.uavatar" class="media-object img-thumbnail avatar avatar-middle">
+              </router-link>
+            </div>
+            <div class="infos">
+              <div class="media-heading">
+                <router-link :to="`/${comment.uname}`" class="remove-padding-left author rm-link-color">
+                  {{ comment.uname }}
+                </router-link>
+                <div class="meta">
+                  <a :id="`reply${index + 1}`" :href="`#reply${index + 1}`" class="anchor">#{{ index + 1 }}</a>
+                  <span> ⋅ </span>
+                  <abbr class="timeago">
+                    {{ comment.date | moment('from', { startOf: 'second' }) }}
+                  </abbr>
+                </div>
+              </div>
+
+              <div class="preview media-body markdown-reply markdown-body" v-html="comment.content"></div>
+            </div>
+          </li>
+        </ul>
+        <div v-show="!comments.length" class="empty-block">
+          暂无评论~~
+        </div>
+      </div>
+    </div>
+
+    <div id="reply-box" class="reply-box form box-block">
+      <div class="form-group comment-editor">
+        <textarea v-if="auth" id="editor"></textarea>
+        <textarea v-else disabled class="form-control" placeholder="需要登录后才能发表评论." style="height:172px"></textarea>
+      </div>
+      <div class="form-group reply-post-submit">
+        <button id="reply-btn" :disabled="!auth" @click="comment" class="btn btn-primary">回复</button>
+        <span class="help-inline">Ctrl+Enter</span>
+      </div>
+      <div v-show="commentHtml" id="preview-box" class="box preview markdown-body" v-html="commentHtml"></div>
+    </div>
+
   </div>
 </template>
 
@@ -80,6 +130,8 @@ export default {
       likeUsers: [], // 点赞用户
       likeClass: '', // 点赞样式
       showQrcode: false, // 是否显示打赏弹窗
+      commentHtml: '', // 评论 HTML
+      comments: [], // 所有评论
     }
   },
   computed: {
@@ -93,13 +145,14 @@ export default {
     const article = this.$store.getters.getArticleById(articleId)
 
     if (article) {
-      let { title, content, date, likeUsers } = article
+      let { title, content, date, likeUsers, comments } = article
 
       this.title = title
       this.content = SimpleMDE.prototype.markdown(emoji.emojify(content, name => name))
       this.date = date
       this.likeUsers = likeUsers || []
       this.likeClass = this.likeUsers.some(likeUser => likeUser.uid === 1) ? 'active' : ''
+      this.renderComments(comments)
 
       this.$nextTick(() => {
         this.$el.querySelectorAll('pre code').forEach((el) => {
@@ -109,6 +162,34 @@ export default {
     }
 
     this.articleId = articleId
+  },
+  mounted() {
+    if (this.auth) {
+      const simplemde = new SimpleMDE({
+        element: document.querySelector('#editor'),
+        placeholder: '请使用 Markdown 格式书写 ;-)，代码片段黏贴时请注意使用高亮语法。',
+        spellChecker: false,
+        autoDownloadFontAwesome: false,
+        toolbar: false,
+        status: false,
+        renderingConfig: {
+          codeSyntaxHighlighting: true
+        }
+      })
+
+      simplemde.codemirror.on('change', () => {
+        this.commentMarkdown = simplemde.value()
+        this.commentHtml = simplemde.markdown(emoji.emojify(this.commentMarkdown, name => name))
+      })
+
+      simplemde.codemirror.on('keyup', (codemirror, event) => {
+        if (event.ctrlKey && event.keyCode === 13) {
+          this.comment()
+        }
+      })
+
+      this.simplemde = simplemde
+    }
   },
   methods: {
     editArticle() {
@@ -151,7 +232,40 @@ export default {
           })
         }
       }
-    }
+    },
+    comment() {
+      if (this.commentMarkdown && this.commentMarkdown.trim() !== '') {
+        const user = this.user || {}
+
+        this.$store.dispatch('comment', {
+          comment: {
+            uname: user.name,
+            uavatar: user.avatar,
+            content: this.commentMarkdown
+          },
+          articleId: this.articleId
+        }).then(this.renderComments)
+
+        this.simplemde.value('')
+        document.querySelector('#reply-btn').focus()
+
+				this.$nextTick(() => {
+		      const lastComment = document.querySelector('#reply-list li:last-child')
+		      if (lastComment) lastComment.scrollIntoView(true)
+		    })
+      }
+    },
+    renderComments(comments) {
+      if (Array.isArray(comments)) {
+        const newComments = comments.map(comment => ({ ...comment }))
+
+        for (let comment of newComments) {
+          comment.content = SimpleMDE.prototype.markdown(emoji.emojify(comment.content, name => name))
+        }
+
+        this.comments = newComments
+      }
+    },
   }
 }
 </script>
