@@ -6,8 +6,7 @@ export const post = ({ commit, state }, { article, articleId }) => {
   if (!Array.isArray(articles)) articles = []
 
   if (article) {
-    const uid = 1
-    const { title, content } = article
+    const { uid = 1, title, content } = article
     const date = new Date()
 
     if (articleId === undefined) {
@@ -54,6 +53,7 @@ export const post = ({ commit, state }, { article, articleId }) => {
 export const like = ({ commit, state }, { articleId, isAdd }) => {
   let articles = state.articles
   let likeUsers = []
+  const uid = 1
 
   if (!Array.isArray(articles)) articles = []
 
@@ -62,17 +62,14 @@ export const like = ({ commit, state }, { articleId, isAdd }) => {
       likeUsers = Array.isArray(article.likeUsers) ? article.likeUsers : likeUsers
 
       if (isAdd) {
-        const currentUser = likeUsers.filter(likeUser => parseInt(likeUser.uid) === 1)
+        const currentUser = likeUsers.filter(likeUser => parseInt(likeUser.uid) === uid)
 
         if (!currentUser.length) {
-          likeUsers.push({
-            uid: 1,
-            avatar: state.user.avatar
-          })
+          likeUsers.push({ uid })
         }
       } else {
         for (let likeUser of likeUsers) {
-          if (parseInt(likeUser.uid) === 1) {
+          if (parseInt(likeUser.uid) === uid) {
             likeUsers.splice(likeUsers.indexOf(likeUser), 1)
             break
           }
@@ -88,7 +85,7 @@ export const like = ({ commit, state }, { articleId, isAdd }) => {
   return likeUsers
 }
 
-export const comment = ({ commit, state }, { comment, articleId, commentId }) => {
+export const comment = ({ commit, state }, { articleId, comment, commentId }) => {
   let articles = state.articles
   let comments = []
 
@@ -99,8 +96,7 @@ export const comment = ({ commit, state }, { comment, articleId, commentId }) =>
       comments = Array.isArray(article.comments) ? article.comments : comments
 
       if (comment) {
-        const uid = 1
-        const { uname, uavatar, content } = comment
+        const { uid = 1, content } = comment
         const date = new Date()
 
         if (commentId === undefined) {
@@ -115,11 +111,23 @@ export const comment = ({ commit, state }, { comment, articleId, commentId }) =>
           comments.push({
             uid,
             commentId,
-            uname,
-            uavatar,
             content,
             date
           })
+        } else {
+          for (let comment of comments) {
+            if (parseInt(comment.commentId) === parseInt(commentId)) {
+              comment.content = content
+              break
+            }
+          }
+        }
+      } else {
+        for (let comment of comments) {
+          if (parseInt(comment.commentId) === parseInt(commentId)) {
+            comments.splice(comments.indexOf(comment), 1)
+            break
+          }
         }
       }
 

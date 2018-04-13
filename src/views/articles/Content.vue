@@ -31,8 +31,8 @@
         </div>
         <div class="voted-users">
           <div class="user-lists">
-            <span v-for="user in likeUsers">
-              <img :src="user.avatar" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : user.uid === 1 }">
+            <span v-for="likeUser in likeUsers">
+              <img :src="user && user.avatar" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === 1 }">
             </span>
           </div>
           <div v-if="!likeUsers.length" class="vote-hint">成为第一个点赞的人吧 😄</div>
@@ -63,7 +63,7 @@
         </div>
       </div>
       <div class="panel-body">
-        <ul id="reply-list" class="list-group row">
+        <transition-group name="fade" tag="ul" id="reply-list" class="list-group row">
           <li v-for="(comment, index) in comments" :key="comment.commentId" class="list-group-item media">
             <div class="avatar avatar-container pull-left">
               <router-link :to="`/${comment.uname}`">
@@ -75,6 +75,13 @@
                 <router-link :to="`/${comment.uname}`" class="remove-padding-left author rm-link-color">
                   {{ comment.uname }}
                 </router-link>
+                <span v-if="auth" class="operate pull-right">
+                  <template v-if="comment.uid === 1">
+                    <a href="javascript:;" @click="editComment(comment.commentId, index)"><i class="fa fa-edit"></i></a>
+                    <span> ⋅ </span>
+                    <a href="javascript:;" @click="deleteComment(comment.commentId)"><i class="fa fa-trash-o"></i></a>
+                  </template>
+                </span>
                 <div class="meta">
                   <a :id="`reply${index + 1}`" :href="`#reply${index + 1}`" class="anchor">#{{ index + 1 }}</a>
                   <span> ⋅ </span>
@@ -87,7 +94,7 @@
               <div class="preview media-body markdown-reply markdown-body" v-html="comment.content"></div>
             </div>
           </li>
-        </ul>
+        </transition-group>
         <div v-show="!comments.length" class="empty-block">
           暂无评论~~
         </div>
@@ -100,8 +107,11 @@
         <textarea v-else disabled class="form-control" placeholder="需要登录后才能发表评论." style="height:172px"></textarea>
       </div>
       <div class="form-group reply-post-submit">
-        <button id="reply-btn" :disabled="!auth" @click="comment" class="btn btn-primary">回复</button>
-        <span class="help-inline">Ctrl+Enter</span>
+        <button id="reply-btn" :disabled="!auth" @click="comment" class="btn btn-primary">
+          {{ commentId ? '保存编辑' : '回复' }}
+        </button>
+        <span v-show="commentId" class="help-inline btn-cancel" style="cursor:pointer" @click="cancelEditComment">取消编辑</span>
+        <span v-show="!commentId" class="help-inline">Ctrl+Enter</span>
       </div>
       <div v-show="commentHtml" id="preview-box" class="box preview markdown-body" v-html="commentHtml"></div>
     </div>
@@ -132,6 +142,7 @@ export default {
       showQrcode: false, // 是否显示打赏弹窗
       commentHtml: '', // 评论 HTML
       comments: [], // 所有评论
+      commentId: undefined, // 评论 ID
     }
   },
   computed: {
@@ -185,6 +196,8 @@ export default {
       simplemde.codemirror.on('keyup', (codemirror, event) => {
         if (event.ctrlKey && event.keyCode === 13) {
           this.comment()
+        } else if (this.commentId && event.keyCode === 27) {
+          this.cancelEditComment()
         }
       })
 
@@ -235,41 +248,87 @@ export default {
     },
     comment() {
       if (this.commentMarkdown && this.commentMarkdown.trim() !== '') {
-        const user = this.user || {}
-
         this.$store.dispatch('comment', {
-          comment: {
-            uname: user.name,
-            uavatar: user.avatar,
-            content: this.commentMarkdown
-          },
-          articleId: this.articleId
+          comment: { content: this.commentMarkdown },
+          articleId: this.articleId,
+          commentId: this.commentId
         }).then(this.renderComments)
 
-        this.simplemde.value('')
-        document.querySelector('#reply-btn').focus()
+        if (this.commentId) {
+          this.cancelEditComment()
+        } else {
+          this.simplemde.value('')
+          document.querySelector('#reply-btn').focus()
 
-				this.$nextTick(() => {
-		      const lastComment = document.querySelector('#reply-list li:last-child')
-		      if (lastComment) lastComment.scrollIntoView(true)
-		    })
+          this.$nextTick(() => {
+            const lastComment = document.querySelector('#reply-list li:last-child')
+            if (lastComment) lastComment.scrollIntoView(true)
+          })
+        }
       }
     },
     renderComments(comments) {
       if (Array.isArray(comments)) {
         const newComments = comments.map(comment => ({ ...comment }))
+        const user = this.user || {}
 
         for (let comment of newComments) {
+          comment.uname = user.name
+          comment.uavatar = user.avatar
           comment.content = SimpleMDE.prototype.markdown(emoji.emojify(comment.content, name => name))
         }
 
         this.comments = newComments
+        this.commentsMarkdown = comments
       }
+    },
+    editComment(commentId, commentIndex) {
+      const simplemde = this.simplemde
+      const codemirror = simplemde.codemirror
+      const comments = this.commentsMarkdown
+
+      for (const comment of comments) {
+        if (parseInt(comment.commentId) === parseInt(commentId)) {
+          simplemde.value(comment.content)
+          codemirror.focus()
+          codemirror.setCursor(codemirror.lineCount(), 0)
+          this.commentIndex = commentIndex + 1
+          this.commentId = commentId
+          break
+        }
+      }
+    },
+    cancelEditComment() {
+      this.commentId = undefined
+      this.simplemde.value('')
+
+      this.$nextTick(() => {
+        const currentComment = document.querySelector(`#reply-list li:nth-child(${this.commentIndex})`)
+
+        if (currentComment) {
+          currentComment.scrollIntoView(true)
+          currentComment.querySelector('.operate a').focus()
+        }
+      })
+    },
+    deleteComment(commentId) {
+      this.$swal({
+        text: '你确定要删除此评论吗?',
+        confirmButtonText: '删除'
+      }).then((res) => {
+        if (res.value) {
+          this.$store.dispatch('comment', {
+            commentId,
+            articleId: this.articleId
+          }).then(this.renderComments)
+        }
+      })
     },
   }
 }
 </script>
 
 <style scoped>
-
+.fade-enter-active, .fade-leave-active { transition: opacity .5s;}
+.fade-enter, .fade-leave-to { opacity: 0;}
 </style>
