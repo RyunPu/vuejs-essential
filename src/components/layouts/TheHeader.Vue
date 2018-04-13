@@ -39,7 +39,7 @@ export default {
   data() {
     return {
       logo: {
-        src: `${this.uploadsUrl}sites/T8mk968ceFj4uiFhvv9zh7ACdQFNwo4U.png`,
+        src: `${this.uploadsUrl}sites/ByvFbNlQYVwhvTyBgLdqitchoacDNznN.jpg`,
         title: 'VuejsCaff'
       },
       navList: ['社区', '头条', '问答', '教程'],

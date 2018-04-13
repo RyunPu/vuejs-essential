@@ -32,7 +32,7 @@
         <div class="voted-users">
           <div class="user-lists">
             <span v-for="likeUser in likeUsers">
-              <img :src="user && user.avatar" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === 1 }">
+              <img :src="user && user.avatar" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === uid }">
             </span>
           </div>
           <div v-if="!likeUsers.length" class="vote-hint">成为第一个点赞的人吧 😄</div>
@@ -156,13 +156,14 @@ export default {
     const article = this.$store.getters.getArticleById(articleId)
 
     if (article) {
-      let { title, content, date, likeUsers, comments } = article
+      let { uid, title, content, date, likeUsers, comments } = article
 
+      this.uid = uid
       this.title = title
       this.content = SimpleMDE.prototype.markdown(emoji.emojify(content, name => name))
       this.date = date
       this.likeUsers = likeUsers || []
-      this.likeClass = this.likeUsers.some(likeUser => likeUser.uid === 1) ? 'active' : ''
+      this.likeClass = this.likeUsers.some(likeUser => likeUser.uid === this.uid) ? 'active' : ''
       this.renderComments(comments)
 
       this.$nextTick(() => {

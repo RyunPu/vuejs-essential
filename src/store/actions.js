@@ -62,9 +62,9 @@ export const like = ({ commit, state }, { articleId, isAdd }) => {
       likeUsers = Array.isArray(article.likeUsers) ? article.likeUsers : likeUsers
 
       if (isAdd) {
-        const currentUser = likeUsers.filter(likeUser => parseInt(likeUser.uid) === uid)
+        const isAdded = likeUsers.some(likeUser => parseInt(likeUser.uid) === uid)
 
-        if (!currentUser.length) {
+        if (!isAdded) {
           likeUsers.push({ uid })
         }
       } else {
