@@ -1,6 +1,7 @@
 export default [
   {
     path: '/',
+    alias: '/topics',
     name: 'Home',
     component: () => import('@/views/Home')
   },

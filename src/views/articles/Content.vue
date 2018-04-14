@@ -76,11 +76,11 @@
                   {{ comment.uname }}
                 </router-link>
                 <span v-if="auth" class="operate pull-right">
-                  <template v-if="comment.uid === 1">
+                  <span v-if="comment.uid === uid">
                     <a href="javascript:;" @click="editComment(comment.commentId, index)"><i class="fa fa-edit"></i></a>
                     <span> ⋅ </span>
                     <a href="javascript:;" @click="deleteComment(comment.commentId)"><i class="fa fa-trash-o"></i></a>
-                  </template>
+                  </span>
                 </span>
                 <div class="meta">
                   <a :id="`reply${index + 1}`" :href="`#reply${index + 1}`" class="anchor">#{{ index + 1 }}</a>
@@ -137,11 +137,11 @@ export default {
       content: '', // 文章内容
       date: '', // 文章创建时间
       uid: 1, // 用户 ID
-      likeUsers: [], // 点赞用户
+      likeUsers: [], // 点赞用户列表
       likeClass: '', // 点赞样式
       showQrcode: false, // 是否显示打赏弹窗
       commentHtml: '', // 评论 HTML
-      comments: [], // 所有评论
+      comments: [], // 评论列表
       commentId: undefined, // 评论 ID
     }
   },
