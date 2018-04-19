@@ -5,13 +5,6 @@
     <div class="col-md-9 topics-index main-col">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <!-- <ul class="list-inline topic-filter">
-            <li><a href="/topics?filter=default" class="active">活跃</a></li>
-            <li><a href="/topics?filter=excellent">精华</a></li>
-            <li><a href="/topics?filter=vote">投票</a></li>
-            <li><a href="/topics?filter=recent">最近</a></li>
-            <li><a href="/topics?filter=noreply">零回复</a></li>
-          </ul> -->
           <ul class="list-inline topic-filter">
             <li v-for="item in filters">
               <router-link v-title="item.title" :class="{ active: filter === item.filter }" :to="`/topics?filter=${item.filter}`">{{ item.name }}</router-link>
@@ -89,7 +82,7 @@ export default {
         vm.showMsg('操作成功')
       }
 
-      vm.showDataByFilter(to.query.filter)
+      vm.setDataByFilter(to.query.filter)
     })
   },
   computed: {
@@ -105,7 +98,7 @@ export default {
       }
     },
     '$route'(to) {
-      this.showDataByFilter(to.query.filter)
+      this.setDataByFilter(to.query.filter)
     }
   },
   methods: {
@@ -114,7 +107,7 @@ export default {
       this.msgType = type
       this.msgShow = true
     },
-    showDataByFilter(filter = 'default') {
+    setDataByFilter(filter = 'default') {
       this.filter = filter
       this.articles = this.$store.getters.getArticlesByFilter(filter)
     }
