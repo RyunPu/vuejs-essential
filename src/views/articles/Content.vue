@@ -32,7 +32,8 @@
         <div class="voted-users">
           <div class="user-lists">
             <span v-for="likeUser in likeUsers">
-              <img :src="user && user.avatar" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === uid }">
+              <router-link v-if="likeUser.uname" :to="`/${likeUser.uname}`" :src="likeUser.uavatar" tag="img" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === uid }"></router-link>
+              <router-link v-else-if="user" :to="`/${user.name}`" :src="user.avatar" tag="img" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === uid }"></router-link>
             </span>
           </div>
           <div v-if="!likeUsers.length" class="vote-hint">成为第一个点赞的人吧 😄</div>
@@ -158,7 +159,6 @@ export default {
     if (article) {
       let { uid, title, content, date, likeUsers, comments } = article
 
-      this.uid = uid
       this.title = title
       this.content = SimpleMDE.prototype.markdown(emoji.emojify(content, name => name))
       this.date = date
@@ -274,8 +274,8 @@ export default {
         const user = this.user || {}
 
         for (let comment of newComments) {
-          comment.uname = user.name
-          comment.uavatar = user.avatar
+          comment.uname = comment.uname || user.name
+          comment.uavatar = comment.uavatar || user.avatar
           comment.content = SimpleMDE.prototype.markdown(emoji.emojify(comment.content, name => name))
         }
 

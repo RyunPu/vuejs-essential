@@ -51,8 +51,8 @@ const actions = {
 }
 
 const getters = {
-  getArticleById: (state) => (id) => {
-    let articles = state.articles
+  getArticleById: (state, getters) => (id) => {
+    let articles = getters.computedArticles
 
     if (Array.isArray(articles)) {
       articles = articles.filter(article => parseInt(id) === parseInt(article.articleId))

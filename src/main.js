@@ -28,7 +28,7 @@ const isAddMockData = true
 const userArticles = store.getters.getArticlesByUid(1)
 
 if (isAddMockData) {
-  store.commit('UPDATE_ARTICLES', [...userArticles, ...mockArticles(10)])
+  store.commit('UPDATE_ARTICLES', [...userArticles, ...mockArticles(20)])
 } else {
   store.commit('UPDATE_ARTICLES', userArticles)
 }

@@ -4,7 +4,7 @@
       <div class="panel-body">
         <h1 class="all-articles">
           专栏文章
-          <router-link to="/articles/create" class="btn btn-primary pull-right">
+          <router-link v-if="auth" to="/articles/create" class="btn btn-primary pull-right">
             <i class="fa fa-paint-brush"></i>
             创作文章
           </router-link>
@@ -12,7 +12,7 @@
 
         <ul class="list-group">
           <li v-for="article in articles" class="list-group-item">
-            <img v-if="user" :src="user.avatar" class="avatar avatar-small">
+            <img :src="article.uavatar" class="avatar avatar-small">
             <router-link :to="`/articles/${article.articleId}/content`" class="title">
               {{ article.title }}
             </router-link>
@@ -31,11 +31,21 @@ import { mapState } from 'vuex'
 
 export default {
   name: 'List',
+  data() {
+    return {
+      articles: [] // 对应用户文章
+    }
+  },
   computed: {
     ...mapState([
-      'user',
-      'articles'
+      'auth',
+      'user'
     ])
+  },
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      vm.articles = vm.$store.getters.getArticlesByUid(null, to.params.user)
+    })
   }
 }
 </script>

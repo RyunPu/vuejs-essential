@@ -54,7 +54,10 @@ export const mockArticles = (num = 10) => {
 
     // 加入点赞用户
     randomArticles.forEach((article, index) => {
-      likeUsers.push({ uid: article.uid })
+      likeUsers.push({
+        uid: article.uid,
+        uname: article.uname
+      })
     })
 
     randomArticles = getRandomArticles(articles)
@@ -79,8 +82,10 @@ export const mockArticles = (num = 10) => {
   return articles
 }
 
-// 获取指定数量的随机文章
+// 获取指定数量的随机的不重复文章
 function getRandomArticles(articles, num = 5) {
   const randomNum = Math.floor(Math.random() * num + 1)
-  return [...Array(randomNum)].map(() => articles[Math.floor(Math.random() * articles.length)])
+  const randomArticles = [...Array(randomNum)].map(() => articles[Math.floor(Math.random() * articles.length)])
+  // Set 类似于数组，但其成员的值都是唯一的，因此可以下面的方法去重
+  return [...new Set(randomArticles)]
 }
