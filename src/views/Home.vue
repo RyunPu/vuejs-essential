@@ -5,12 +5,17 @@
     <div class="col-md-9 topics-index main-col">
       <div class="panel panel-default">
         <div class="panel-heading">
-          <ul class="list-inline topic-filter">
+          <!-- <ul class="list-inline topic-filter">
             <li><a href="/topics?filter=default" class="active">活跃</a></li>
             <li><a href="/topics?filter=excellent">精华</a></li>
             <li><a href="/topics?filter=vote">投票</a></li>
             <li><a href="/topics?filter=recent">最近</a></li>
             <li><a href="/topics?filter=noreply">零回复</a></li>
+          </ul> -->
+          <ul class="list-inline topic-filter">
+            <li v-for="item in filters">
+              <router-link v-title="item.title" :class="{ active: filter === item.filter }" :to="`/topics?filter=${item.filter}`">{{ item.name }}</router-link>
+            </li>
           </ul>
           <div class="clearfix"></div>
         </div>
@@ -54,7 +59,16 @@ export default {
     return {
       msg: '', // 消息
       msgType: '', // 消息类型
-      msgShow: false // 是否显示消息，默认不显示
+      msgShow: false, // 是否显示消息，默认不显示
+      articles: [], // 文章列表
+      filter: 'default', // 默认过滤方式
+      filters: [ // 过滤方式列表
+        { filter: 'default', name: '活跃', title: '最后回复排序'},
+        { filter: 'excellent', name: '精华', title: '只看加精的话题'},
+        { filter: 'vote', name: '投票', title: '点赞数排序'},
+        { filter: 'recent', name: '最近', title: '发布时间排序'},
+        { filter: 'noreply', name: '零回复', title: '无人问津的话题'}
+      ],
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -74,22 +88,24 @@ export default {
       } else if (logout) {
         vm.showMsg('操作成功')
       }
+
+      vm.showDataByFilter(to.query.filter)
     })
   },
   computed: {
     ...mapState([
       'auth',
       'user'
-    ]),
-    articles() {
-      return this.$store.getters.computedArticles
-    }
+    ])
   },
   watch: {
     auth(value) {
       if (!value) {
         this.showMsg('操作成功')
       }
+    },
+    '$route'(to) {
+      this.showDataByFilter(to.query.filter)
     }
   },
   methods: {
@@ -97,6 +113,10 @@ export default {
       this.msg = msg
       this.msgType = type
       this.msgShow = true
+    },
+    showDataByFilter(filter = 'default') {
+      this.filter = filter
+      this.articles = this.$store.getters.getArticlesByFilter(filter)
     }
   }
 }

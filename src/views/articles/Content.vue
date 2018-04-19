@@ -32,8 +32,8 @@
         <div class="voted-users">
           <div class="user-lists">
             <span v-for="likeUser in likeUsers">
-              <router-link v-if="likeUser.uname" :to="`/${likeUser.uname}`" :src="likeUser.uavatar" tag="img" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === uid }"></router-link>
-              <router-link v-else-if="user" :to="`/${user.name}`" :src="user.avatar" tag="img" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === uid }"></router-link>
+              <router-link v-if="likeUser.uname" :to="`/${likeUser.uname}`" :src="likeUser.uavatar" tag="img" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === 1 }"></router-link>
+              <router-link v-else-if="user" :to="`/${user.name}`" :src="user.avatar" tag="img" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === 1 }"></router-link>
             </span>
           </div>
           <div v-if="!likeUsers.length" class="vote-hint">成为第一个点赞的人吧 😄</div>
@@ -164,7 +164,7 @@ export default {
       this.content = SimpleMDE.prototype.markdown(emoji.emojify(content, name => name))
       this.date = date
       this.likeUsers = likeUsers || []
-      this.likeClass = this.likeUsers.some(likeUser => likeUser.uid === this.uid) ? 'active' : ''
+      this.likeClass = this.likeUsers.some(likeUser => likeUser.uid === 1) ? 'active' : ''
       this.renderComments(comments)
 
       this.$nextTick(() => {
