@@ -14,15 +14,6 @@ Vue.use(Message)
 
 Vue.config.productionTip = false
 
-/* eslint-disable no-new */
-new Vue({
-  el: '#app',
-  router,
-  store,
-  components: { App },
-  template: '<App/>'
-})
-
 // 是否加入测试数据
 const isAddMockData = true
 const userArticles = store.getters.getArticlesByUid(1)
@@ -32,3 +23,12 @@ if (isAddMockData) {
 } else {
   store.commit('UPDATE_ARTICLES', userArticles)
 }
+
+/* eslint-disable no-new */
+new Vue({
+  el: '#app',
+  router,
+  store,
+  components: { App },
+  template: '<App/>'
+})

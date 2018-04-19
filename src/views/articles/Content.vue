@@ -77,7 +77,7 @@
                   {{ comment.uname }}
                 </router-link>
                 <span v-if="auth" class="operate pull-right">
-                  <span v-if="comment.uid === uid">
+                  <span v-if="comment.uid === 1">
                     <a href="javascript:;" @click="editComment(comment.commentId, index)"><i class="fa fa-edit"></i></a>
                     <span> ⋅ </span>
                     <a href="javascript:;" @click="deleteComment(comment.commentId)"><i class="fa fa-trash-o"></i></a>
@@ -159,6 +159,7 @@ export default {
     if (article) {
       let { uid, title, content, date, likeUsers, comments } = article
 
+      this.uid = uid
       this.title = title
       this.content = SimpleMDE.prototype.markdown(emoji.emojify(content, name => name))
       this.date = date
