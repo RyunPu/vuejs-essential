@@ -1,28 +1,3 @@
-export const getArticlesByUid = (state, getters) => (uid, user) => {
-  let articles = getters.computedArticles
-
-  if (Array.isArray(articles)) {
-    if (user) {
-      if (state.user && state.user.name === user) {
-        uid = 1
-      } else {
-        for (const article of articles) {
-          if (article.uname === user) {
-            uid = article.uid
-            break
-          }
-        }
-      }
-    }
-
-    articles = articles.filter(article => parseInt(uid) === parseInt(article.uid))
-  } else {
-    articles = []
-  }
-
-  return articles
-}
-
 export const computedArticles = (state) => {
   let articles = state.articles
   let newArticles = []
@@ -41,7 +16,7 @@ export const computedArticles = (state) => {
   }
 
   if (Array.isArray(articles)) {
-    newArticles = articles.map(article => ({ ...article }))
+    newArticles = JSON.parse(JSON.stringify(articles))
     newArticles.forEach((article) => {
       const comments = article.comments
       const likeUsers = article.likeUsers
@@ -75,6 +50,27 @@ export const computedArticles = (state) => {
   }
 
   return newArticles
+}
+
+export const getArticlesByUid = (state, getters) => (uid, user) => {
+  let articles = getters.computedArticles
+
+  if (Array.isArray(articles)) {
+    if (user) {
+      for (const article of articles) {
+        if (article.uname === user) {
+          uid = article.uid
+          break
+        }
+      }
+    }
+
+    articles = articles.filter(article => parseInt(uid) === parseInt(article.uid))
+  } else {
+    articles = []
+  }
+
+  return articles
 }
 
 export const getArticlesByFilter = (state, getters) => (filter) => {
