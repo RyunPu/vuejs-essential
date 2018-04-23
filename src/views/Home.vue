@@ -37,6 +37,10 @@
           </ul>
         </div>
 
+        <div class="panel-footer text-right remove-padding-horizontal pager-footer">
+          <Pagination :currentPage="currentPage" :total="total" :pageSize="pageSize" :onPageChange="changePage" />
+        </div>
+
       </div>
     </div>
 
@@ -50,18 +54,20 @@ export default {
   name: 'Home',
   data() {
     return {
-      msg: '', // 消息
-      msgType: '', // 消息类型
-      msgShow: false, // 是否显示消息，默认不显示
-      articles: [], // 文章列表
-      filter: 'default', // 默认过滤方式
-      filters: [ // 过滤方式列表
+      msg: '',
+      msgType: '',
+      msgShow: false,
+      articles: [],
+      filter: 'default',
+      filters: [
         { filter: 'default', name: '活跃', title: '最后回复排序'},
         { filter: 'excellent', name: '精华', title: '只看加精的话题'},
         { filter: 'vote', name: '投票', title: '点赞数排序'},
         { filter: 'recent', name: '最近', title: '发布时间排序'},
         { filter: 'noreply', name: '零回复', title: '无人问津的话题'}
       ],
+      total: 0, // 文章总数
+      pageSize: 10, // 每页条数
     }
   },
   beforeRouteEnter(to, from, next) {
@@ -89,7 +95,10 @@ export default {
     ...mapState([
       'auth',
       'user'
-    ])
+    ]),
+    currentPage() {
+      return parseInt(this.$route.query.page) || 1
+    }
   },
   watch: {
     auth(value) {
@@ -108,8 +117,16 @@ export default {
       this.msgShow = true
     },
     setDataByFilter(filter = 'default') {
+      const pageSize = this.pageSize
+      const currentPage = this.currentPage
+      const allArticles = this.$store.getters.getArticlesByFilter(filter)
+
       this.filter = filter
-      this.articles = this.$store.getters.getArticlesByFilter(filter)
+      this.total = allArticles.length
+      this.articles = allArticles.slice(pageSize * (currentPage - 1), pageSize * currentPage)
+    },
+    changePage(page) {
+      this.$router.push({ query: { ...this.$route.query, page } })
     }
   }
 }
