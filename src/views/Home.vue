@@ -44,14 +44,20 @@
       </div>
     </div>
 
+    <TheSidebar/>
+
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import TheSidebar from '@/components/layouts/TheSidebar'
 
 export default {
   name: 'Home',
+  components: {
+    TheSidebar
+  },
   data() {
     return {
       msg: '',
