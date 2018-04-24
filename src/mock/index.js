@@ -4,8 +4,7 @@ import store from '../store'
 // 拦截活跃用户请求并返回相关数据
 Mock.mock('/users/active', 'get', () => {
   // 使用派生状态 computedArticles
-  const computedArticles = store.getters.computedArticles
-  let articles = Array.isArray(computedArticles) ? computedArticles : []
+  let articles = store.getters.computedArticles
   let comments = []
   let usersObj = {}
   // 活跃用户
@@ -40,4 +39,28 @@ Mock.mock('/users/active', 'get', () => {
   activeUsers = activeUsers.slice(0, 8)
 
   return activeUsers
+})
+
+// 拦截最热文章请求并返回相关数据，请求方法为 POST
+Mock.mock('/articles/hot', 'post', (options) => {
+  // 将评论最少的文章排在前面
+  let filteredArticles = store.getters.getArticlesByFilter('noreply')
+  // 将评论最多的文章排在前面
+  let articles = filteredArticles.reverse()
+  // 取 7 天内评论最多的文章
+  let hotArticles = articles.filter((article) => (new Date() - new Date(article.date) < 604800000))
+  // 文章条数
+  let num
+
+  // 请求有传 num 时使用它
+  if (options.body) {
+    try {
+      num = JSON.parse(options.body).num
+    } catch (e) {}
+  }
+
+  // 取前 num 条评论最多的文章，默认 10 条
+  hotArticles = hotArticles.slice(0, num || 10)
+
+  return hotArticles
 })

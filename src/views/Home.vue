@@ -73,7 +73,7 @@ export default {
         { filter: 'noreply', name: '零回复', title: '无人问津的话题'}
       ],
       total: 0, // 文章总数
-      pageSize: 10, // 每页条数
+      pageSize: 30, // 每页条数
     }
   },
   beforeRouteEnter(to, from, next) {

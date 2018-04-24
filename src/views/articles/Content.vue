@@ -32,8 +32,7 @@
         <div class="voted-users">
           <div class="user-lists">
             <span v-for="likeUser in likeUsers">
-              <router-link v-if="likeUser.uname" :to="`/${likeUser.uname}`" :src="likeUser.uavatar" tag="img" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === 1 }"></router-link>
-              <router-link v-else-if="user" :to="`/${user.name}`" :src="user.avatar" tag="img" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === 1 }"></router-link>
+              <router-link :to="`/${likeUser.uname}`" :src="likeUser.uavatar" tag="img" class="img-thumbnail avatar avatar-middle" :class="{ 'animated swing' : likeUser.uid === 1 }"></router-link>
             </span>
           </div>
           <div v-if="!likeUsers.length" class="vote-hint">成为第一个点赞的人吧 😄</div>
@@ -238,12 +237,12 @@ export default {
         if (active) {
           this.likeClass = ''
           this.$store.dispatch('like', { articleId }).then((likeUsers) => {
-            this.likeUsers = likeUsers
+            this.likeUsers = this.recompute('likeUsers')
           })
         } else {
           this.likeClass = 'active animated rubberBand'
           this.$store.dispatch('like', { articleId, isAdd: true }).then((likeUsers) => {
-            this.likeUsers = likeUsers
+            this.likeUsers = this.recompute('likeUsers')
           })
         }
       }
@@ -271,12 +270,11 @@ export default {
     },
     renderComments(comments) {
       if (Array.isArray(comments)) {
+        comments = this.recompute('comments')
         const newComments = comments.map(comment => ({ ...comment }))
         const user = this.user || {}
 
         for (let comment of newComments) {
-          comment.uname = comment.uname || user.name
-          comment.uavatar = comment.uavatar || user.avatar
           comment.content = SimpleMDE.prototype.markdown(emoji.emojify(comment.content, name => name))
         }
 
@@ -326,6 +324,17 @@ export default {
         }
       })
     },
+    recompute(key) {
+      const articleId = this.$route.params.articleId
+      const article = this.$store.getters.getArticleById(articleId)
+      let arr
+
+      if (article) {
+        arr = article[key]
+      }
+
+      return arr || []
+    }
   }
 }
 </script>
