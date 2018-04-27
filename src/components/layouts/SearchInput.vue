@@ -36,7 +36,7 @@ export default {
       const value = this.value
 
       if (value !== '') {
-        console.log(value)
+        this.$router.push({ name: 'Search', query: { q: value } })
       }
     },
     updateSearchValue() {

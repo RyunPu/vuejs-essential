@@ -129,3 +129,24 @@ export const getArticlesByFilter = (state, getters) => (filter) => {
 
   return filteredArticles
 }
+
+export const getArticlesByKeyword = (state, getters) => (keyword) => {
+  let articles = getters.computedArticles
+  let results = []
+
+  if (Array.isArray(articles)) {
+    articles.forEach((article) => {
+      let { articleId, title, content } = article
+      const regex = new RegExp(`(${keyword})`, 'gi')
+
+      if (title.indexOf(keyword) !== -1 || content.indexOf(keyword) !== -1) {
+        const url = `${state.origin}/articles/${articleId}/content`
+        title = title.replace(regex, '<span class="highlight">$1</span>')
+        content = content.substr(0, 100).replace(regex, '<span class="highlight">$1</span>')
+        results.push({...article, ...{ url, title, content }})
+      }
+    })
+  }
+
+  return results
+}
