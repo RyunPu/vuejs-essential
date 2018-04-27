@@ -130,7 +130,7 @@ export const getArticlesByFilter = (state, getters) => (filter) => {
   return filteredArticles
 }
 
-export const getArticlesByKeyword = (state, getters) => (keyword) => {
+export const getArticlesByKeyword = (state, getters) => (keyword, filter) => {
   let articles = getters.computedArticles
   let results = []
 
@@ -146,6 +146,20 @@ export const getArticlesByKeyword = (state, getters) => (keyword) => {
         results.push({...article, ...{ url, title, content }})
       }
     })
+  }
+
+  switch (filter) {
+    case 'vote':
+      results.sort((a, b) => {
+        const alikeUsers = Array.isArray(a.likeUsers) ? a.likeUsers : []
+        const blikeUsers = Array.isArray(b.likeUsers) ? b.likeUsers : []
+
+        return blikeUsers.length - alikeUsers.length
+      })
+
+      break
+    default:
+      results.sort((a, b) => a.title.indexOf(keyword) < b.title.indexOf(keyword))
   }
 
   return results
