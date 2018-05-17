@@ -1,0 +1,43 @@
+html,body{font-family:"Helvetica Neue", NotoSansHans-Regular,AvenirNext-Regular,arial,Hiragino Sans GB,"Microsoft Yahei","Hiragino Sans GB","WenQuanYi Micro Hei",sans-serif;}
+textarea{resize:none;}
+.topics-index .topic-filter a.active {border-bottom:2px solid #fbbd08;}
+.navbar-default {border-top:4px solid #4fc08d;height:auto;min-height:54px;}
+.share-link-site {font-size:12px;color:#828282;}
+.topics-index .topic-list .infos .media-heading a:visited {color:#a2a2a2;}
+.btn-circle {width:30px;height:30px;text-align:center;padding:6px 0;font-size:12px;line-height:1.42;border-radius:15px;}
+.btn-shadow {background-color:#fff!important;border:none!important;box-shadow:0 0 5px #ccc;color:#909090;}
+.translation-item .postion .index a {margin:0 5px;margin-top:13px;}
+.topic-content-big-font {font-size:16px;}
+.topic-content-big-font p {line-height:2.2;}
+ul.breadcrumb a {color:inherit;}
+.navbar-default .navbar-brand img {width:auto;height:28px;margin-top:-4px;}
+.flex {display:flex;}
+.flex1 {flex:1;}
+.vcenter {align-items:center;@extend .flex;}
+.hcenter {justify-content: center;@extend .flex;}
+.add-link-underline a,a.add-link-underline {text-decoration:underline;}
+div#reply_notice{margin-bottom:15px;border:1px solid #ddd;}
+#message {margin-bottom:20px;}
+#message .alert {margin-bottom:0;}
+#message + .blog-container {margin-top:20px;}
+.content-body .markdown-body {padding-bottom: 40px;}
+.content-body .markdown-body pre,.content-body .markdown-body pre[class*=lang-] {border-radius: 4px;background:rgba(54,56,58,.98);border: none;}
+code[class*="lang-"],pre[class*="lang-"]{border-radius:4px !important;color:#f8f8f2;background:none;text-shadow:none;font-family:Consolas,Monaco,'Andale Mono','Ubuntu Mono',monospace;text-align:left;white-space:pre;word-spacing:normal;word-break:normal;word-wrap:normal;line-height:1.5;hyphens:none;}
+div {
+  .editor-preview-active-side h1,.editor-preview h1,.markdown-body h1,.markdown-reply h1{padding-bottom:0.3em;font-size:2.25em;line-height:1.2;border-bottom:1px solid #eee;}.editor-preview-active-side h2,.editor-preview h2,.markdown-body h2,.markdown-reply h2{padding-bottom:0.3em;font-size:1.3em;line-height:1.225;border-bottom:1px solid #eee;}.editor-preview-active-side h3,.editor-preview h3,.markdown-body h3,.markdown-reply h3{font-size:1.2em;line-height:1.43;}
+  .editor-preview pre,.editor-preview-side pre,.preview.markdown-body pre {background:rgba(54,56,58,.98);}
+  .comment-editor .CodeMirror,.comment-editor .CodeMirror-scroll { min-height: 150px;}
+}
+.i-middle {position: relative;top: -2px;vertical-align: middle;}
+i.avatar,.align-middle {vertical-align: middle;}
+.blog-container {
+  margin-top:50px;
+  h1 {margin:1.1em auto 1em;font-size:28px;line-height:38px;}
+  .panel {margin-bottom:25px;}
+  .panel .panel-heading {border-bottom:1px solid #f8f8f8;background-color:#fff;}
+  .panel .panel-footer {background-color:#fff;padding-right:0px;padding-left:0px;}
+  .article-body {padding:1em 30px 0;}
+}
+.payment-qrcode h5 {margin:1.5em 0;}
+html.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) { overflow-y: visible; height: 100%;}
+body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) { overflow-y: hidden; height: 100%;}
