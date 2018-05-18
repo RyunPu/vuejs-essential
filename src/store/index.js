@@ -53,8 +53,24 @@ const actions = {
   ...moreActions
 }
 
+// 添加 getters
+const getters = {
+  getArticleById: (state) => (id) => {
+    let articles = state.articles
+
+    if (Array.isArray(articles)) {
+      articles = articles.filter(article => parseInt(id) === parseInt(article.articleId))
+      return articles.length ? articles[0] : null
+    } else {
+      return null
+    }
+  }
+}
+
 const store = new Vuex.Store({
   state,
+  // 注册 getters
+  getters,
   mutations,
   actions
 })
