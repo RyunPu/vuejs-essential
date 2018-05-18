@@ -25,6 +25,13 @@
           <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
+          <!-- 个人专栏 -->
+          <li v-if="user">
+            <router-link :to="`/${user.name}`">
+              <i class="fa fa-list-ul text-md i-middle"></i>
+              个人专栏
+            </router-link>
+          </li>
           <!-- 编辑资料 -->
           <li>
             <router-link to="/users/1/edit">
