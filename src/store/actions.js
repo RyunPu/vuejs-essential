@@ -97,3 +97,55 @@ export const like = ({ commit, state }, { articleId, isAdd }) => {
   // 返回点赞用户列表
   return likeUsers
 }
+
+// 参数 articleId 是文章 ID；comment 是评论内容；commentId 是评论 ID
+export const comment = ({ commit, state }, { articleId, comment, commentId }) => {
+  // 仓库的文章
+  let articles = state.articles
+  // 评论列表
+  let comments = []
+
+  if (!Array.isArray(articles)) articles = []
+
+  for (let article of articles) {
+    // 找到对应文章时
+    if (parseInt(article.articleId) === parseInt(articleId)) {
+      // 更新评论列表
+      comments = Array.isArray(article.comments) ? article.comments : comments
+
+      if (comment) {
+        // 获取用户传入的评论内容，设置用户 ID 的默认值为 1
+        const { uid = 1, content } = comment
+        const date = new Date()
+
+        if (commentId === undefined) {
+          const lastComment = comments[comments.length - 1]
+
+          // 新建 commentId
+          if (lastComment) {
+            commentId = parseInt(lastComment.commentId) + 1
+          } else {
+            commentId = comments.length + 1
+          }
+
+          // 在评论列表中加入当前评论
+          comments.push({
+            uid,
+            commentId,
+            content,
+            date
+          })
+        }
+      }
+
+      // 更新文章的评论列表
+      article.comments = comments
+      break
+    }
+  }
+
+  // 提交 UPDATE_ARTICLES 以更新所有文章
+  commit('UPDATE_ARTICLES', articles)
+  // 返回评论列表
+  return comments
+}
