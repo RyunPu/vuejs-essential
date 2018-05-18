@@ -54,4 +54,11 @@ export default [
     name: 'Content',
     component: () => import('@/views/articles/Content.vue')
   },
+  // Edit
+  {
+    path: '/articles/:articleId/edit',
+    name: 'Edit',
+    component: () => import('@/views/articles/Create'),
+    meta: { auth: true }
+  },
 ]
