@@ -43,4 +43,5 @@ $fa-font-path: "~font-awesome/fonts/";
 @import "./styles/extra";
 @import '~simplemde/dist/simplemde.min';
 @import '~highlight.js/styles/paraiso-dark';
+@import "~animate.css/animate.min";
 </style>
