@@ -19,4 +19,4 @@ npm run build
 
 https://ryunpu.github.io/vuejs-essential/dist/
 
-![file](https://vuejscaffcdn.phphub.org/uploads/images/201805/19/2/FlKqz040n1.jpeg?imageView2/2/w/1240/h/0)
+![网站首页](https://user-images.githubusercontent.com/6168498/40269022-d9003704-5baa-11e8-9afd-11b03af00702.jpeg)
