@@ -20,7 +20,7 @@
     "node-emoji": "^1.8.1",
     "qrcode.vue": "^1.6.0",
     "simplemde": "^1.11.2",
-    "sweetalert2": "^7.20.5",
+    "sweetalert2": "^7.15.1",
     "vue": "^2.5.2",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1"

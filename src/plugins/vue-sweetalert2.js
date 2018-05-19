@@ -3,7 +3,7 @@ import swal from 'sweetalert2'
 export default {
   install: (Vue) => {
     // sweetalert2 的设置默认配置的方法
-    const extendedSwal = swal.mixin({
+    swal.setDefaults({
       type: 'warning',
       showCancelButton: true,
       confirmButtonColor: 'rgb(140,212,245)',
@@ -11,8 +11,8 @@ export default {
     })
 
     // 添加全局方法
-    Vue.swal = extendedSwal
+    Vue.swal = swal
     // 添加实例方法
-    Vue.prototype.$swal = extendedSwal
+    Vue.prototype.$swal = swal
   }
 }
