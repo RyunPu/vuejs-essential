@@ -7,6 +7,7 @@ Vue.use(Router)
 
 const router =  new Router({
   mode: 'history',
+  base: '/vuejs-essential/dist',
   linkExactActiveClass: 'active',
   // 指定滚动行为
   scrollBehavior(to, from, savedPosition) {
