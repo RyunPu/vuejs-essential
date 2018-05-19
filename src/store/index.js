@@ -11,8 +11,8 @@ const state = {
   user: ls.getItem('user'),
   auth: ls.getItem('auth'),
   articles: ls.getItem('articles'),
-  // 搜索值
-  searchValue: ''
+  searchValue: '',
+  origin: location.origin.indexOf('github.io') !== -1 ? `${location.origin}/vuejs-essential/dist/` : location.origin
 }
 
 const mutations = {
