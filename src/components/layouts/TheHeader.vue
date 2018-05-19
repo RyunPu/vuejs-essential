@@ -51,7 +51,7 @@ export default {
         src: `${this.uploadsUrl}sites/ByvFbNlQYVwhvTyBgLdqitchoacDNznN.jpg`,
         title: 'VuejsCaff'
       },
-      navList: ['社区', '头条', '问答', '教程'],
+      navList: ['社区'],
       activeNavIndex: 0,
       showCollapsedNav: false
     }
