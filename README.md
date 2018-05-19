@@ -1,6 +1,6 @@
 # vuejs-essential
 
-> 『Vue.js 实战 - 基础篇』源码，使用 Vue.js 开发一个类似 [VuejsCaff 社区](https://vuejscaff.com/topics) 部分的网站
+> [Vue.js 实战 - 基础篇](https://vuejscaff.com/courses/vuejs-essential) 源码，使用 Vue.js 开发一个类似 [VuejsCaff 社区](https://vuejscaff.com/topics) 部分的网站
 
 ## Build Setup
 
