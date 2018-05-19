@@ -15,15 +15,29 @@
       </div>
     </div>
 
+    <!-- 活跃用户 -->
+    <div class="panel panel-default corner-radius panel-active-users">
+      <div class="panel-heading text-center">
+        <h3 class="panel-title">活跃用户</h3>
+      </div>
+      <div class="panel-body">
+        <div class="users-label">
+          <router-link v-for="(user, index) in activeUsers" :to="`/${user.name}`" :key="index" class="users-label-item">
+            <img :src="user.avatar" class="avatar-small inline-block">
+            {{ user.name }}
+          </router-link>
+        </div>
+      </div>
+    </div>
+
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Sidebar',
+  name: 'TheSidebar',
   data() {
     return {
-      // 实战课程
       slides: [
         {
           title: '《Laravel 入门教程 - 从零到部署上线》',
@@ -40,8 +54,17 @@ export default {
           img: 'https://lccdn.phphub.org/uploads/banners/tEd4GxhMp6VMh9e0hrUH.jpg',
           link: 'https://laravel-china.org/topics/7657'
         }
-      ]
+      ],
+      activeUsers: [] // 活跃用户
     }
+  },
+  // 在实例创建完成后
+  created() {
+    // 通过 axios 执行 GET 请求来返回活跃用户
+    this.$axios.get('/users/active').then((response) => {
+      // 在成功的回调里，从 response.data 获取返回数据
+      this.activeUsers = response.data
+    })
   }
 }
 </script>
