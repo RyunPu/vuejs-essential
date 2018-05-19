@@ -1,6 +1,6 @@
 # vuejs-essential
 
-> A Vue.js project
+> 使用 Vue.js 开发的一个类似 [VuejsCaff 社区](https://vuejscaff.com/topics) 部分的网站
 
 ## Build Setup
 
@@ -13,9 +13,10 @@ npm run dev
 
 # build for production with minification
 npm run build
-
-# build for production and view the bundle analyzer report
-npm run build --report
 ```
 
-For a detailed explanation on how things work, check out the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
+## Preview
+
+https://ryunpu.github.io/vuejs-essential/dist/
+
+![file](https://vuejscaffcdn.phphub.org/uploads/images/201805/19/2/FlKqz040n1.jpeg?imageView2/2/w/1240/h/0)
