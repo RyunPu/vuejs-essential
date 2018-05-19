@@ -1,5 +1,5 @@
 <template>
-  <div class="container blog-container">
+  <div class="blog-container">
     <div class="blog-pages">
       <!-- 用于渲染『文章列表』和『文章内容』 -->
       <router-view/>
