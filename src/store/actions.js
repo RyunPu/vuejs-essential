@@ -29,7 +29,8 @@ export const post = ({ commit, state }, { article, articleId }) => {
     } else {
       for (let article of articles) {
         if (parseInt(article.articleId) === parseInt(articleId)) {
-          article = { ...article, ...{ title, content } }
+          article.title = title
+          article.content = content
           break
         }
       }
