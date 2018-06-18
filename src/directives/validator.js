@@ -76,9 +76,8 @@ export default {
     el.addEventListener(eventType, handler, false)
 
     el.destroy = () => {
-      ['input', eventType].forEach((event) => {
-        el.removeEventListener(event, handler, false)
-      })
+      el.removeEventListener('input', defaultHandler, false)
+      el.removeEventListener(eventType, handler, false)
       el.destroy = null
     }
   },
