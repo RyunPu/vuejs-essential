@@ -30,6 +30,8 @@ function validate(el, modifiers, bindingValue) {
   } else {
     showError(el)
   }
+  
+  checkIsCanSubmit(el)
 }
 
 function showError(el, error) {
@@ -59,6 +61,14 @@ function getErrorElement(el) {
   }
 
   return errorElement
+}
+
+function checkIsCanSubmit(el) {
+  const form = el.closest('[data-validator-form]')
+  const submitBtn = form.querySelector('[type=submit]')
+  const errors = form.querySelectorAll('.has-error')
+
+  submitBtn.canSubmit = !errors.length
 }
 
 export default {
