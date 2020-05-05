@@ -29,7 +29,7 @@ export default {
     // 每页条数
     pageSize: {
       type: Number,
-      default: 10,
+      default: 20,
       validator: value => value > 0
     },
     // 当前页改变后的回调
